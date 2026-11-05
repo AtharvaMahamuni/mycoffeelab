@@ -55,6 +55,7 @@ This repository contains the complete 16-part strategic, competitive, and techni
 | **20** | [Layer Visualization & Club Brand Identity](./docs/20-LAYER-VISUALIZATION-AND-PREMIUM-CLUB-BRANDING.md) | Creative solutions for comparison height disparity (Architectural Vitrine, Stratum Pillars, Exploded Discs) and luxury old-school club aesthetic. |
 | **21** | [Guided User Journey & Simplified Calculators](./docs/21-GUIDED-JOURNEY-AND-SIMPLIFIED-CALCULATORS.md) | Dual-layer calculator architecture (Kitchen Practical vs Precision Lab), 3-question Drink Matchmaker, and glossary tooltips. |
 | **22** | [Calculator Opportunity Catalog & Visual Formulations](./docs/22-CALCULATOR-OPPORTUNITY-CATALOG.md) | Exhaustive catalog of 11 new calculators (Caffeine half-life, Espresso dial-in compass, Grind microns, SCA TDS, Iced flash brew, Calorie macros, Home ROI). |
+| **23** | [Motion Graphics Simulators & Caffeine Pharmacokinetics](./docs/23-MOTION-GRAPHICS-SIMULATORS-AND-CAFFEINE-SPEC.md) | Deep motion graphic architecture for the Circadian Caffeine Half-Life & Sleep Simulator, plus 5 additional coffee physics simulators. |
 | **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, measured contrast, and layer visualizer hex codes. |
 
 ---
