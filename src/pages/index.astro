@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import RatioTool from "../components/RatioTool.astro";
+import { appNode, graph, personNode, websiteNode } from "../lib/schema";
+
+const description = "Coffee to water in grams. The default is the SCA golden cup, 55 g per litre.";
+const jsonLd = graph(
+  websiteNode(),
+  personNode(),
+  appNode("Coffee ratio calculator", "/", description),
+);
+---
+
+<BaseLayout title="Coffee ratio calculator" description={description} path="/" jsonLd={jsonLd}>
+  <h1>Coffee ratio calculator</h1>
+  <RatioTool />
+  <h2>Drinks and comparisons</h2>
+  <ul class="card-list">
+    <li><a href="/types-of-coffee/">Coffee drinks, in grams</a></li>
+    <li><a href="/compare/">Coffee drink comparisons</a></li>
+    <li><a href="/calculators/">Coffee calculators</a></li>
+  </ul>
+</BaseLayout>

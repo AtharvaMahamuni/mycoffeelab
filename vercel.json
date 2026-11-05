@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    { "source": "/compare/latte-vs-flat-white", "destination": "/compare/flat-white-vs-latte/", "permanent": true },
+    { "source": "/compare/flat-white-vs-cortado", "destination": "/compare/cortado-vs-flat-white/", "permanent": true },
+    { "source": "/compare/cortado-vs-macchiato", "destination": "/compare/macchiato-vs-cortado/", "permanent": true },
+    { "source": "/compare/latte-vs-cappuccino", "destination": "/compare/cappuccino-vs-latte/", "permanent": true },
+    { "source": "/compare/americano-vs-espresso", "destination": "/compare/espresso-vs-americano/", "permanent": true }
+  ]
+}

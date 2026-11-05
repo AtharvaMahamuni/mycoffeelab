@@ -1,0 +1,22 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://mycoffeelab.example/#website",
+      "name": "MyCoffeeLab",
+      "url": "https://mycoffeelab.example/",
+      "publisher": { "@id": "https://mycoffeelab.example/#atharva" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://mycoffeelab.example/#atharva",
+      "name": "Atharva Mahamuni",
+      "sameAs": [
+        "https://x.com/athmatwt",
+        "https://www.linkedin.com/in/atharvamahamuni",
+        "https://github.com/AtharvaMahamuni"
+      ]
+    }
+  ]
+}

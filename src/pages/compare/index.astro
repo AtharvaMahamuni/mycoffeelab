@@ -1,0 +1,34 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import { comparisons } from "../../lib/comparisons";
+import { breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const description = "Five coffee drink comparisons, drawn on one scale.";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { label: "Coffee drink comparisons" },
+];
+const jsonLd = graph(
+  personNode(),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee drink comparisons", path: "/compare/" },
+  ]),
+);
+---
+
+<BaseLayout title="Coffee drink comparisons" description={description} path="/compare/" crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Coffee drink comparisons</h1>
+  <ul class="card-list">
+    {
+      comparisons.map((comparison) => (
+        <li>
+          <a href={`/compare/${comparison.slug}/`}>
+            {comparison.h1}
+            <p>{comparison.sentence}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

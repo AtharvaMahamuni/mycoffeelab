@@ -19,7 +19,7 @@ In strict accordance with project requirements, this project replaces Cursor Ora
 
 * **Canvas (Warm Oat Milk):** `#FBF8F4` — Soft, luminous culinary paper canvas; reduces glare in morning kitchen light.
 * **Ink Primary (Roasted Espresso Bean):** `#1A1412` — Deep near-black with rich cacao undertones; achieves an exceptional **16.4:1 contrast ratio (WCAG AAA)**.
-* **Brand Voltage (Crema Amber):** `#C86D32` — Warm, caramelized golden amber of a freshly pulled espresso shot.
+* **Brand Mark (Crema Amber):** `#C86D32` — Large mark and crema layer only. Buttons use `#9A4316` so white labels pass WCAG AA. See [the build specification](./docs/17-BUILD-SPECIFICATION.md).
 * **Surface Card (Steamed Microfoam):** `#FFFFFF` — Crisp, elevated card surfaces with warm tactile hairlines (`#E6DED5`).
 * **Drink Visualizer Tokens:** Specialized hex values for Crema (`#D49A58`), Espresso (`#362013`), Steamed Whole Milk (`#EFE8DD`), Microfoam Cap (`#FBF8F3`), and Clean Water (`#DCE8F0`).
 
@@ -49,7 +49,9 @@ This repository contains the complete 16-part strategic, competitive, and techni
 | **14** | [90-Day Execution Roadmap](./docs/14-90-DAY-EXECUTION-ROADMAP.md) | Phased sprint schedule, weekly milestones, deliverables, and target KPI benchmarks. |
 | **15** | [Risks, Assumptions & Hypotheses](./docs/15-RISKS-AND-HYPOTHESES.md) | Risk register, algorithmic safeguards, explicit assumptions, and validation experiments. |
 | **16** | [The Final Strategic Question](./docs/16-FINAL-STRATEGIC-ANSWER.md) | Decisive answer: *Why choose MyCoffeeLab over existing ranking pages?* |
-| **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, contrast ratings, and layer visualizer hex codes. |
+| **17** | [Build Specification](./docs/17-BUILD-SPECIFICATION.md) | Locked P0 pages, drink record, picture math, calculator tests, page checks, measurement, and corrected tokens. **Wins on conflict.** |
+| **18** | [Implementation Plan](./docs/18-IMPLEMENTATION-PLAN.md) | What the Astro app builds, where the math lives, and which checks must pass. |
+| **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, measured contrast, and layer visualizer hex codes. |
 
 ---
 
@@ -76,14 +78,29 @@ mycoffeelab/
 │   ├── 14-90-DAY-EXECUTION-ROADMAP.md
 │   ├── 15-RISKS-AND-HYPOTHESES.md
 │   ├── 16-FINAL-STRATEGIC-ANSWER.md
+│   ├── 17-BUILD-SPECIFICATION.md
+│   ├── 18-IMPLEMENTATION-PLAN.md
 │   └── DESIGN-SYSTEM-PALETTE.md
 ```
 
 ---
 
+## Run the site
+
+The P0 app is the Astro project in this folder. The canonical origin is the placeholder `https://mycoffeelab.example` until a domain is chosen.
+
+```bash
+npm install
+npm test
+npm run build
+npm run dev
+```
+
+`npm test` locks the recipe math. `npm run build` also checks the 25 pages, the reverse comparison redirects, and the size budgets.
+
 ## 🚀 Key Takeaways & Strategic Verdict
 
-1. **The Core Advantage:** We win by removing the 3,000-word ad-cluttered fluff and delivering **instant visual answers** (interactive 2D glass cross-sections) and **precision mass calculators (grams)** that load in under 1 second on mobile.
+1. **The Core Advantage:** The first screen shows the cup and the gram recipe. Performance passes the budgets in the build specification: LCP under 2.5 seconds on a slow mobile lab run, with a review if it is over 1.5 seconds.
 2. **Defensible Against AI Overviews:** While LLMs summarize static text definitions, they cannot embed dynamic, reactive sliders or an interactive Coffee Lab inside a Google search snippet.
 3. **No Heavy Fluid Simulation at Launch:** The MVP strictly utilizes lightweight procedural SVG/Canvas for 60fps mobile performance, keeping Three.js as an optional desktop visual studio.
 4. **Editorial Integrity:** No annoying auto-play videos, no pop-up newsletter gates, and no deceptive volume-based measuring.

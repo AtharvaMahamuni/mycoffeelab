@@ -1,6 +1,7 @@
 # 10. Product Opportunity Assessment & Evaluation Matrix
 
-**Objective:** Rigorous evaluation of the 6 proposed core platform experiences to establish product-market fit, development complexity, and sequencing.
+**Objective:** Rigorous evaluation of the 6 proposed core platform experiences to establish product-market fit, development complexity, and sequencing.  
+**Launch:** Caffeine, calories, and the open Lab are out of P0. See [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md). The ratio defaults in the deconstruction below are replaced by the SCA and shop labels in that specification.
 
 ---
 
@@ -26,7 +27,7 @@
 ### Experience 2: Coffee Calculators (P0)
 * **What It Solves:** Eradicates confusing volumetric measurements (tablespoons, fluid ounces) and ad-bloated math tools.
 * **Core Mechanics:**
-  - **Coffee-to-Water Calculator:** Slide coffee grams (12g to 60g) or target water yield (200ml to 1000ml) with instant SCA ratio presets (1:15 Strong, 1:16 Golden, 1:17 Light).
+  - **Coffee-to-Water Calculator:** Inputs are grams of coffee or grams of water. The default preset is the SCA golden-cup center, 55 g per litre (1:18.2). Shop ratios such as 1:15 and 1:16 are separate labels. The locked tests are in document 17.
   - **Espresso Ratio Calculator:** Input dose (18g) and ratio (1:2), receive target yield (36g) and extraction time benchmark (27s).
   - **Visual Carafe Fill:** As the slider moves, an animated SVG carafe fills with brewed coffee, visually confirming volume.
 

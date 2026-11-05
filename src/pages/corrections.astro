@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import { MILK_G_PER_ML, SAUCE_G_PER_ML } from "../lib/picture";
+import { PICTURE_MODEL } from "../lib/site";
+
+const description = "Assumption log for MyCoffeeLab house defaults. The issue tracker is not set.";
+---
+
+<BaseLayout title="Corrections" description={description} path="/corrections/">
+  <h1>Corrections</h1>
+  <p class="lede">If a house default is wrong, the change belongs in this log with the old number, the new number, and the reason.</p>
+  <p>The issue tracker is not set. Until it is, this page is the record.</p>
+  <h2>Current assumptions</h2>
+  <dl class="recipe">
+    <div><dt>Picture model</dt><dd>{PICTURE_MODEL}</dd></div>
+    <div><dt>Whole milk</dt><dd>{MILK_G_PER_ML} g/ml</dd></div>
+    <div><dt>Chocolate sauce</dt><dd>{SAUCE_G_PER_ML} g/ml</dd></div>
+    <div><dt>Water in the tools</dt><dd>1.00 g/ml</dd></div>
+    <div><dt>Espresso liquid</dt><dd>1.00 g/ml</dd></div>
+    <div><dt>Cold-brew retention</dt><dd>2.0 g of water held per 1 g of coffee, editable on the calculator</dd></div>
+    <div><dt>SCA golden cup</dt><dd>55 g per litre, plus or minus 10%</dd></div>
+  </dl>
+  <h2>Change log</h2>
+  <p>No house default has been changed since picture-model@1.</p>
+</BaseLayout>

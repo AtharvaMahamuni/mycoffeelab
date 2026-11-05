@@ -1,6 +1,7 @@
 # 12. Monetisation and Business Potential
 
-**Core Economic Thesis:** Traffic alone does not generate revenue. Commercial viability depends on the precise alignment between **user intent**, **contextual relevance**, and **trust-preserving monetization models**.
+**Core Economic Thesis:** Traffic alone does not generate revenue. Commercial viability depends on the precise alignment between **user intent**, **contextual relevance**, and **trust-preserving monetization models**.  
+**Not a launch plan.** Commission rates, conversion counts, and sponsorship fees in this file were not sourced. P0 has no affiliate link. The rule for a later link is in [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md) section 9.5.
 
 ---
 

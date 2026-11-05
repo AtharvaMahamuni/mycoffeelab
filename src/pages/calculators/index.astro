@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import { breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const description = "Three coffee calculators: brew ratio, espresso yield, and cold brew.";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { label: "Coffee calculators" },
+];
+const jsonLd = graph(
+  personNode(),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+  ]),
+);
+---
+
+<BaseLayout title="Coffee calculators" description={description} path="/calculators/" crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Coffee calculators</h1>
+  <ul class="card-list">
+    <li><a href="/calculators/coffee-to-water-ratio/">Coffee to water ratio calculator<p>SCA center by default. Shop ratios are labeled as shop ratios.</p></a></li>
+    <li><a href="/calculators/espresso-ratio/">Espresso ratio calculator<p>Dose in, yield out. Time is a sentence, not a formula.</p></a></li>
+    <li><a href="/calculators/cold-brew-ratio/">Cold brew ratio calculator<p>Concentrate or ready to drink, minus the water the grounds hold.</p></a></li>
+  </ul>
+</BaseLayout>

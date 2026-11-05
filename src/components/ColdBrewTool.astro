@@ -1,0 +1,46 @@
+---
+import { computeColdBrew } from "../lib/calculators";
+import { jarMarkup } from "../lib/cup";
+
+const initial = computeColdBrew({ mode: "concentrate", coffeeG: 100, ratio: 5, retentionPerG: 2 });
+---
+
+<div data-cold-brew-tool>
+  <div class="controls">
+    <fieldset class="choices">
+      <legend>Brew mode</legend>
+      <label class="choice"><input data-mode-concentrate type="radio" name="cold-mode" value="concentrate" checked /> Concentrate</label>
+      <label class="choice"><input data-mode-rtd type="radio" name="cold-mode" value="rtd" /> Ready to drink</label>
+    </fieldset>
+    <div class="field">
+      <label for="cb-coffee">Coffee in grams</label>
+      <input id="cb-coffee" data-coffee type="number" min="20" max="200" step="1" value="100" inputmode="decimal" />
+      <input data-coffee-range type="range" min="20" max="200" step="1" value="100" aria-label="Coffee in grams" />
+    </div>
+    <div class="field">
+      <label for="cb-ratio">Water per 1 g coffee</label>
+      <input id="cb-ratio" data-ratio type="number" min="3" max="16" step="0.1" value="5" inputmode="decimal" />
+      <input data-ratio-range type="range" min="3" max="16" step="0.1" value="5" aria-label="Water per 1 g coffee" />
+    </div>
+    <div class="field">
+      <label for="cb-retention">Water held per 1 g coffee, an assumption</label>
+      <input id="cb-retention" data-retention type="number" min="0" max="4" step="0.1" value="2" inputmode="decimal" />
+      <input data-retention-range type="range" min="0" max="4" step="0.1" value="2" aria-label="Water held per 1 g coffee" />
+    </div>
+  </div>
+  <p class="live" data-live aria-live="polite">{initial.sentence}</p>
+  <p class="error" data-error hidden>The grounds would hold all of the water at this retention. Raise the water or lower the retention.</p>
+  <div class="stage">
+    <div class="cup-slot" data-visual set:html={jarMarkup(initial.waterG, initial.brewedYieldG, initial.ok)} />
+    <div>
+      <h2>Default worked example</h2>
+      <p>100 g of coffee and 500 g of water, with the grounds holding 2 g of water per gram of coffee, leaves 300 g of concentrate. A 1:1 serve adds 300 g of water to that concentrate.</p>
+      <p>Finished concentrate = brew water − (retention × coffee). The default retention is an assumption, not a lab measurement.</p>
+    </div>
+  </div>
+</div>
+<script>
+  import { mountColdBrew } from "../scripts/coldbrew";
+  const root = document.querySelector("[data-cold-brew-tool]");
+  if (root instanceof HTMLElement) mountColdBrew(root);
+</script>

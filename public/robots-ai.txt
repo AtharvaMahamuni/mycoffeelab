@@ -1,0 +1,14 @@
+# Companion to robots.txt. This file does not authenticate bots.
+
+User-agent: *
+Allow: /
+
+# Training crawlers are asked to skip the site.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /

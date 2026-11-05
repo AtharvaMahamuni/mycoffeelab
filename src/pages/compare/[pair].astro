@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import DrinkFigure from "../../components/DrinkFigure.astro";
+import { comparisons, pairDrinks } from "../../lib/comparisons";
+import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+export function getStaticPaths() {
+  return comparisons.map((comparison) => ({
+    params: { pair: comparison.slug },
+    props: { comparison },
+  }));
+}
+
+const { comparison } = Astro.props;
+const { left, right } = pairDrinks(comparison);
+const path = `/compare/${comparison.slug}/`;
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/compare/", label: "Comparisons" },
+  { label: comparison.h1 },
+];
+const jsonLd = graph(
+  personNode(),
+  articleNode(comparison.h1, path, comparison.sentence),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee drink comparisons", path: "/compare/" },
+    { name: comparison.h1, path },
+  ]),
+);
+---
+
+<BaseLayout title={comparison.h1} description={comparison.sentence} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{comparison.h1}</h1>
+  <p class="lede">{comparison.sentence}</p>
+  <div class="pair">
+    <article>
+      <h2><a href={`/drinks/${left.slug}/`}>{left.h1}</a></h2>
+      <DrinkFigure drink={left} />
+    </article>
+    <article>
+      <h2><a href={`/drinks/${right.slug}/`}>{right.h1}</a></h2>
+      <DrinkFigure drink={right} />
+    </article>
+  </div>
+</BaseLayout>

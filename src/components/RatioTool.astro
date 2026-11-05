@@ -1,0 +1,92 @@
+---
+import { carafeMarkup } from "../lib/cup";
+import {
+  computeRatio,
+  METHOD_NOTES,
+  RATIO_PRESETS,
+  SCA_CENTER,
+  SCA_SENTENCE,
+} from "../lib/calculators";
+
+const initial = computeRatio({ mode: "water", waterG: 500, coffeeG: 0, ratio: SCA_CENTER });
+const faq = [
+  {
+    q: "What is the SCA golden cup ratio?",
+    a: "55 g of coffee per litre of water, plus or minus 10%. The center is about 1:18.2.",
+  },
+  {
+    q: "Is 1:16 the SCA standard?",
+    a: "No. 1:16 is a common pour-over preset. It is slightly stronger than the SCA band.",
+  },
+  {
+    q: "Is bloom water extra?",
+    a: "No. Bloom is twice the coffee dose, and it is part of the total water.",
+  },
+];
+---
+
+<div data-ratio-tool>
+  <div class="controls">
+    <fieldset class="choices">
+      <legend>Which mass do you know?</legend>
+      <label class="choice"><input data-mode-water type="radio" name="brew-mode" value="water" checked /> Water</label>
+      <label class="choice"><input data-mode-coffee type="radio" name="brew-mode" value="coffee" /> Coffee</label>
+    </fieldset>
+    <div class="field">
+      <label for="water-g">Water in grams</label>
+      <input id="water-g" data-water type="number" min="100" max="1500" step="1" value="500" inputmode="decimal" />
+      <input data-water-range type="range" min="100" max="1000" step="1" value="500" aria-label="Water in grams" />
+    </div>
+    <div class="field">
+      <label for="coffee-g">Coffee in grams</label>
+      <input id="coffee-g" data-coffee type="number" min="10" max="80" step="0.1" value={initial.coffeeG} inputmode="decimal" readonly />
+      <input data-coffee-range type="range" min="10" max="80" step="0.1" value={initial.coffeeG} aria-label="Coffee in grams" disabled />
+    </div>
+    <fieldset class="presets">
+      <legend>Ratio presets</legend>
+      {
+        RATIO_PRESETS.map((preset) => (
+          <button type="button" data-preset-id={preset.id} aria-pressed={preset.id === "sca" ? "true" : "false"}>
+            {preset.label}
+          </button>
+        ))
+      }
+    </fieldset>
+    <fieldset class="presets">
+      <legend>Method notes, not SCA presets</legend>
+      {METHOD_NOTES.map((method) => (
+        <button type="button" class="button-quiet" data-method-id={method.id} aria-pressed="false">
+          {method.label}
+        </button>
+      ))}
+    </fieldset>
+    <p data-band-note>{RATIO_PRESETS.find((preset) => preset.id === "sca")?.note}</p>
+    <p data-method-note></p>
+  </div>
+  <p class="live" data-live aria-live="polite">{initial.sentence}</p>
+  <div class="stage">
+    <div class="cup-slot" data-visual set:html={carafeMarkup(initial.coffeeG, initial.waterG)} />
+    <div>
+      <h2>Default worked example</h2>
+      <p>500 g of water at the SCA center is 27.5 g of coffee. Bloom is 55.0 g, and that bloom is part of the 500 g.</p>
+      <p>coffee grams = water grams ÷ ratio. water grams = coffee grams × ratio. bloom grams = coffee grams × 2.</p>
+      <p>{SCA_SENTENCE}</p>
+    </div>
+  </div>
+  <section class="faq">
+    <h2>Ratio questions</h2>
+    {
+      faq.map((item) => (
+        <>
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </>
+      ))
+    }
+  </section>
+</div>
+<script>
+  import { mountRatio } from "../scripts/ratio";
+  const root = document.querySelector("[data-ratio-tool]");
+  if (root instanceof HTMLElement) mountRatio(root);
+</script>

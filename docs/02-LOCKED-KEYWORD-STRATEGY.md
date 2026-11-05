@@ -1,7 +1,8 @@
 # 02. Locked Keyword Strategy & Ingestion Framework
 
-**Status:** Framework Defined — Ready for User Metrics Ingestion  
-**Rule Compliance:** Zero Fabricated Data. Strict separation between Locked Keywords and Discovered Opportunities.
+**Status:** Framework Defined — Metrics still empty  
+**Rule Compliance:** Zero Fabricated Data. Strict separation between Locked Keywords and Discovered Opportunities.  
+**Build gate:** [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md) chooses P0 without these volumes. No title is final, and no URL beyond that P0 list is added, until a row below has real volume and difficulty.
 
 ---
 
@@ -29,11 +30,11 @@ In strict adherence to project directives:
 | *coffee to water ratio calculator* | *[Pending User Input]* | *[Pending User Input]* | Interactive / Tool | Brewing Utilities | *[Pending]* | Dedicated interactive calculator (`/calculators/coffee-to-water-ratio/`). |
 | *espresso ratio calculator* | *[Pending User Input]* | *[Pending User Input]* | Interactive / Tool | Espresso Science | *[Pending]* | Dose-to-yield dial-in calculator (`/calculators/espresso-ratio/`). |
 | *flat white vs latte* | *[Pending User Input]* | *[Pending User Input]* | Informational / Comparison | Drink Comparisons | *[Pending]* | Side-by-side dimensional comparison (`/compare/flat-white-vs-latte/`). |
-| *cortado vs cappuccino* | *[Pending User Input]* | *[Pending User Input]* | Informational / Comparison | Drink Comparisons | *[Pending]* | Milk-texture & foam density contrast (`/compare/cortado-vs-cappuccino/`). |
+| *cortado vs cappuccino* | *[Pending User Input]* | *[Pending User Input]* | Informational / Comparison | Drink Comparisons | *[Pending]* | Not a P0 URL. The cortado page links to cappuccino in prose. Add `/compare/cortado-vs-cappuccino/` only after this row has metrics. |
 | *coffee grind size chart* | *[Pending User Input]* | *[Pending User Input]* | Visual / Informational / Tool | Brewing Science | *[Pending]* | Interactive particle/micron visualizer (`/science/grind-size/`). |
 | *cold brew ratio* | *[Pending User Input]* | *[Pending User Input]* | Informational / Tool | Immersion Brewing | *[Pending]* | Concentrate vs ready-to-drink calculator (`/calculators/cold-brew-ratio/`). |
 | *espresso drinks guide* | *[Pending User Input]* | *[Pending User Input]* | Informational / Directory | Espresso Ecosystem | *[Pending]* | Filterable espresso menu page (`/drinks/espresso/`). |
-| *french press ratio* | *[Pending User Input]* | *[Pending User Input]* | Informational / Tool | Immersion Brewing | *[Pending]* | Steep-timer & mass calculator (`/calculators/french-press/`). |
+| *french press ratio* | *[Pending User Input]* | *[Pending User Input]* | Informational / Tool | Immersion Brewing | *[Pending]* | P0 covers this as a preset on `/calculators/coffee-to-water-ratio/`. A standalone URL waits for this row to be filled. |
 
 ---
 

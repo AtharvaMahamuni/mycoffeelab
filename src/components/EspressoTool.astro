@@ -1,0 +1,46 @@
+---
+import { TIME_SENTENCE, computeYield } from "../lib/calculators";
+import { drinkCup } from "../lib/cup";
+import { draw } from "../lib/picture";
+import { vessels } from "../lib/picture";
+
+const doseG = 18;
+const ratio = 2;
+const yieldG = computeYield(doseG, ratio);
+const vessel = { ...vessels.demitasse, capacityMl: 60, label: "demitasse" };
+const drawn = draw(
+  { doseG, yieldG, waterG: 0, milkG: 0, expansion: 1, sauceG: 0, concentrateG: 0, cremaMm: 4, mixed: false },
+  vessel,
+);
+const label = `Espresso yield ${yieldG.toFixed(1)} g from a ${doseG.toFixed(1)} g dose at 1:2.`;
+---
+
+<div data-espresso-tool>
+  <div class="controls">
+    <div class="field">
+      <label for="dose-g">Dose in grams</label>
+      <input id="dose-g" data-dose type="number" min="7" max="22" step="0.1" value={doseG} inputmode="decimal" />
+      <input data-dose-range type="range" min="7" max="22" step="0.1" value={doseG} aria-label="Dose in grams" />
+    </div>
+    <div class="field">
+      <label for="yield-ratio">Yield ratio, grams out per gram in</label>
+      <input id="yield-ratio" data-ratio type="number" min="1" max="3" step="0.1" value={ratio} inputmode="decimal" />
+      <input data-ratio-range type="range" min="1" max="3" step="0.1" value={ratio} aria-label="Yield ratio, grams out per gram in" />
+    </div>
+  </div>
+  <p class="live" data-live aria-live="polite">{label}</p>
+  <div class="stage">
+    <div class="cup-slot" data-visual set:html={drinkCup("demitasse", drawn, label)} />
+    <div>
+      <h2>Default worked example</h2>
+      <p>18.0 g of coffee at 1:2 yields 36.0 g.</p>
+      <p>yield grams = dose grams × ratio.</p>
+      <p>{TIME_SENTENCE} That time is a starting point, not a result of this calculator, and it is not an SCA rule for 18 g in and 36 g out.</p>
+    </div>
+  </div>
+</div>
+<script>
+  import { mountEspresso } from "../scripts/espresso";
+  const root = document.querySelector("[data-espresso-tool]");
+  if (root instanceof HTMLElement) mountEspresso(root);
+</script>

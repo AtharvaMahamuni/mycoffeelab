@@ -1,0 +1,6 @@
+# MyCoffeeLab AI access
+
+Search and answer engines may fetch these public pages.
+Training crawlers are asked not to use the site. See robots.txt.
+The pages are static. There is no login and no private account data.
+Recipe math runs in the browser and is not submitted to a server.

@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import EspressoTool from "../../components/EspressoTool.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const description = "Espresso dose and yield in grams. 18 g at 1:2 is 36 g out.";
+const path = "/calculators/espresso-ratio/";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Espresso ratio calculator" },
+];
+const jsonLd = graph(
+  personNode(),
+  appNode("Espresso ratio calculator", path, description),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: "Espresso ratio calculator", path },
+  ]),
+);
+---
+
+<BaseLayout title="Espresso ratio calculator" description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Espresso ratio calculator</h1>
+  <EspressoTool />
+</BaseLayout>

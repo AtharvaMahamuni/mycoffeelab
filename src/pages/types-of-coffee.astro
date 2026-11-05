@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../components/BaseLayout.astro";
+import { drinks } from "../lib/drinks";
+import { breadcrumbNode, graph, personNode } from "../lib/schema";
+
+const description = "Eleven coffee drinks with the house recipe in grams. A directory, not a bid for the head term.";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { label: "Coffee drinks, in grams" },
+];
+const jsonLd = graph(
+  personNode(),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee drinks, in grams", path: "/types-of-coffee/" },
+  ]),
+);
+---
+
+<BaseLayout title="Coffee drinks, in grams" description={description} path="/types-of-coffee/" crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Coffee drinks, in grams</h1>
+  <p class="lede">Each page is one house default. Where a name splits by country, the other version is written beside the drawing.</p>
+  <ul class="card-list">
+    {
+      drinks.map((drink) => (
+        <li>
+          <a href={`/drinks/${drink.slug}/`}>
+            {drink.h1}
+            <p>{drink.definition}</p>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

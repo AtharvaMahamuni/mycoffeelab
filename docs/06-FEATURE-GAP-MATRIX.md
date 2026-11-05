@@ -1,7 +1,8 @@
 # 06. Feature and Experience Gap Matrix
 
 **Methodology:** Direct comparative benchmarking of proposed MyCoffeeLab capabilities against the competitive landscape.  
-**Validation Standard:** Features are validated against concrete user problems rather than novelty alone.
+**Validation Standard:** Features are validated against concrete user problems rather than novelty alone.  
+**Launch cut:** "Barista-verified" is withdrawn. Caffeine and calorie totals are out of P0. The feature list here is the long map; the build list is [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md).
 
 ---
 

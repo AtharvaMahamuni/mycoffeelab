@@ -1,0 +1,6 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {},
+  "include": ["src", "tests", "astro.config.ts"],
+  "exclude": ["dist", "node_modules"]
+}

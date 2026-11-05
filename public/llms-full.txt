@@ -1,0 +1,24 @@
+# MyCoffeeLab, full notes for agents
+
+Publisher: Atharva Mahamuni. He publishes the house defaults. He is not presented as a barista.
+
+Picture model picture-model@1:
+- Espresso and water: 1.00 g/ml in the interface, because the scale is the instrument.
+- Whole milk: 1.03 g/ml.
+- Steamed volume = liquid milk volume × aeration.
+- Foam centimetres = foam millilitres / the vessel rim area.
+- Chocolate sauce: 1.20 g/ml.
+- A recipe that draws past the cup is a failed build.
+- Crema is drawn only on an unmixed shot and is not part of the yield mass.
+- Cold brew in the tumbler is one mixed body: 150 g concentrate + 150 g water.
+
+SCA golden cup, as printed on the ratio page: 55 g coffee per 1 L water, ± 10%. Center ratio 1:18.2. Band about 1:16.7 to 1:20.
+
+Locked examples:
+- 500 g water at the SCA center → 27.5 g coffee, bloom 55.0 g.
+- 500 g water at 1:16 → 31.3 g coffee, bloom 62.5 g.
+- 100 g coffee, 500 g cold-brew water, retention 2 → 300 g concentrate. A 1:1 dilution adds 300 g water to that concentrate.
+
+Pages are static HTML. Sliders update a polite live region in the browser and do not send the recipe anywhere.
+
+Canonical origin until a domain is chosen: https://mycoffeelab.example

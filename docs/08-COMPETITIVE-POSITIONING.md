@@ -71,4 +71,4 @@ To preserve focus and execution velocity, we establish strict strategic boundari
   * We do not write 3,000-word historical essays on where beans originated in 850 AD unless directly relevant to the brewing recipe.
   * We do not build expensive fluid dynamics or complex smoke shaders that overheat mobile phones.
   * We do not clutter pages with intrusive programmatic display banners or auto-playing video players.
-  * We do not use volume (tablespoons, ounces) as primary units; precision mass (grams) is our non-negotiable standard.
+  * Recipe units are grams. Tablespoons are not an input. Millilitres and fl oz appear only as the size of the empty cup, because that is how the vessel is sold. The picture model in document 17 turns milk grams into a layer with an explicit density and aeration factor.

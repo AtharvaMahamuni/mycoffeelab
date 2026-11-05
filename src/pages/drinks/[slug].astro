@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import DrinkFigure from "../../components/DrinkFigure.astro";
+import { drinks } from "../../lib/drinks";
+import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+export function getStaticPaths() {
+  return drinks.map((drink) => ({ params: { slug: drink.slug }, props: { drink } }));
+}
+
+const { drink } = Astro.props;
+const path = `/drinks/${drink.slug}/`;
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/types-of-coffee/", label: "Drinks" },
+  { label: drink.h1 },
+];
+const jsonLd = graph(
+  personNode(),
+  articleNode(drink.h1, path, drink.definition),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee drinks, in grams", path: "/types-of-coffee/" },
+    { name: drink.h1, path },
+  ]),
+);
+---
+
+<BaseLayout title={drink.h1} description={drink.definition} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{drink.h1}</h1>
+  <p class="status">{drink.status}. <a href="/corrections/">See the assumption log.</a></p>
+  <p class="lede">{drink.definition}</p>
+  <DrinkFigure drink={drink} />
+  <p><a href={drink.calculatorHref}>Open this recipe in the calculator</a></p>
+  <p>{drink.range}</p>
+  <h2>A different version of this name</h2>
+  <p>{drink.variant}</p>
+  {
+    drink.sections.map((section) => (
+      <>
+        <h2>{section.heading}</h2>
+        <p>{section.body}</p>
+      </>
+    ))
+  }
+  {
+    drink.links.length > 0 && (
+      <ul class="card-list">
+        {drink.links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

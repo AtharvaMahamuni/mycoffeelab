@@ -1,21 +1,19 @@
-# Build and dependencies
 node_modules/
 dist/
 .astro/
 .cache/
 
-# Environment and secrets
 .env
 .env.*
 !.env.example
 
-# OS and IDE files
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# Logs
+test-results/
+playwright-report/
 *.log
 npm-debug.log*
 yarn-debug.log*

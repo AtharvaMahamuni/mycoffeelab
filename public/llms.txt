@@ -1,0 +1,21 @@
+# MyCoffeeLab
+
+MyCoffeeLab publishes coffee calculators and eleven house-default drink recipes. Numbers are grams. The production host is not chosen yet.
+
+## Calculators
+
+- [Coffee to water ratio](/calculators/coffee-to-water-ratio/): default is the SCA golden cup, 55 g per litre (about 1:18.2). 1:16 is a shop preset, not the SCA standard. Bloom water is part of the total.
+- [Espresso ratio](/calculators/espresso-ratio/): yield = dose × ratio. 18 g at 1:2 is 36 g. Shot time is a note, not a calculated law.
+- [Cold brew ratio](/calculators/cold-brew-ratio/): finished liquid subtracts water held by the grounds. Default retention is an assumption of 2 g water per 1 g coffee.
+
+## Drinks
+
+House defaults live under /drinks/. A Gibraltar cortado is not a Spanish cortado. A caramel-syrup macchiato is not the espresso macchiato page. Doppio is a section of /drinks/espresso/, not its own URL.
+
+## Comparisons
+
+Five pairs under /compare/. The reverse slug redirects to the canonical pair.
+
+## Not on this site
+
+No caffeine figures, no energy figures, no accounts, no affiliate links, no 3D lab.

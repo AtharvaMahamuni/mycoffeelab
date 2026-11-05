@@ -47,7 +47,7 @@ However, an AI search summary **cannot provide a reactive, drag-and-drop Coffee 
 * Home espresso owners waste expensive bags of beans pulling sour, channeled shots because nobody gives them an interactive troubleshooting guide.
 
 **Our Solution:**
-* **Clarity:** Standardized, visual, barista-verified drink recipes with exact liquid and foam dimensions.
+* **Clarity:** A house default for each drink, with the grams on the page and a regional variant when the name splits. "Barista-verified" is not a claim this site makes.
 * **Accuracy:** A non-negotiable **mass-first standard (grams)** that guarantees repeatable results.
 * **Troubleshooting:** A tactile diagnostic tool that tells them exactly how to fix a bad cup in real time.
 
@@ -61,6 +61,6 @@ Imagine a user searching Google at 7:15 AM on their phone:
 * **The Competitor Experience (HomeGrounds / Omni):**
   The user taps the link. The screen jumps three times as banner ads load. A sticky video player pops up in the bottom corner. They scroll past "The Rich History of Chemex Brewing" and "Why You Need Good Beans." They finally reach an ad-surrounded form with 6 tiny input boxes. They leave frustrated.
 * **The MyCoffeeLab Experience:**
-  The user taps the link. The page loads **instantly in 600 milliseconds**. Directly beneath the headline sits a clean, beautiful Chemex carafe visualizer. The slider is already set to 500ml. It clearly displays: **"31.3g Coffee (Golden 1:16 Ratio) • 60g Bloom Water (45s) • Target Brew Time: 3:45"**. Below it is a discreet toggle to adjust strength to Light (1:17) or Strong (1:15).
+  The user taps the link and gets the calculator under the heading. The default is the SCA golden-cup center: 55 g of coffee per litre, a 1:18.2 ratio. For 500 g of water the page shows **27.5 g of coffee** and a bloom of **55.0 g**, because bloom is twice the dose and is part of the 500 g. A separate preset labeled "Common pour-over (1:16)" shows **31.3 g of coffee** and a bloom of **62.5 g**. The page does not call 1:16 the SCA standard, and it does not take the water in millilitres. Load-time claims are the lab budgets in document 17, not a promise of 600 milliseconds.
 
 That 5-second difference in respect for the user's time, craft, and attention is why people will bookmark MyCoffeeLab, share it on Reddit, and make it their permanent morning brewing companion.

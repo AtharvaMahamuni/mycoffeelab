@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import RatioTool from "../../components/RatioTool.astro";
+import { appNode, breadcrumbNode, faqNode, graph, personNode } from "../../lib/schema";
+
+const description = "Coffee to water in grams. Default is 55 g per litre, the SCA golden-cup center.";
+const path = "/calculators/coffee-to-water-ratio/";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Coffee to water ratio calculator" },
+];
+const faq = [
+  {
+    q: "What is the SCA golden cup ratio?",
+    a: "55 g of coffee per litre of water, plus or minus 10%. The center is about 1:18.2.",
+  },
+  {
+    q: "Is 1:16 the SCA standard?",
+    a: "No. 1:16 is a common pour-over preset. It is slightly stronger than the SCA band.",
+  },
+  {
+    q: "Is bloom water extra?",
+    a: "No. Bloom is twice the coffee dose, and it is part of the total water.",
+  },
+];
+const jsonLd = graph(
+  personNode(),
+  appNode("Coffee to water ratio calculator", path, description),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: "Coffee to water ratio calculator", path },
+  ]),
+  faqNode(faq),
+);
+---
+
+<BaseLayout title="Coffee to water ratio calculator" description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Coffee to water ratio calculator</h1>
+  <RatioTool />
+</BaseLayout>

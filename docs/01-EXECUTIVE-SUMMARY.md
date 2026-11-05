@@ -4,7 +4,8 @@
 **Document Type:** Strategic Competitive Intelligence & Market Opportunity Plan  
 **Role:** Senior SEO Strategist, Product Researcher, Competitive Intelligence Analyst, and Digital Product Strategist  
 **Date of Research:** November 2026  
-**Status:** Strategic Planning Phase (Pre-Implementation)
+**Status:** Strategic Planning Phase (Pre-Implementation)  
+**Scope lock:** [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md) wins where this summary disagrees with it.
 
 ---
 
@@ -53,15 +54,19 @@ We position **MyCoffeeLab** as an **Interactive Coffee Learning & Experimentatio
 
 ## 4. Key Findings Summary
 
-1. **Mass vs. Volume is the #1 User Pain Point:** Community research across r/Coffee and r/espresso reveals that 80% of beginner brewing failures stem from volumetric measuring (tablespoons, fluid ounces) rather than digital scale mass (grams). Existing top-ranking search results perpetuate this confusion. MyCoffeeLab's strict **mass-first standard** immediately establishes authority.
-2. **The "Flat White vs. Latte vs. Cortado" Search Crisis:** Search queries comparing espresso beverages generate hundreds of thousands of monthly searches, yet ranking articles provide contradictory milk volumes. An interactive, side-by-side dimensional layer comparison solves this visually in 3 seconds.
-3. **Lightweight Canvas/SVG Beats Heavy WebGL for Mobile Utility:** While 3D (Three.js) provides great engagement for the desktop "Coffee Studio," 74% of coffee-related queries occur on mobile devices near kitchen countertops. Fast, 60fps SVG/Canvas vector visualizers must power the mobile core to ensure instant Core Web Vitals (<1.2s LCP).
-4. **Design Identity (Replacing Cursor Orange):** The project adopts **"Roaster's Craft"**—a tailored palette of Roasted Espresso (`#1A1412`), Warm Crema Amber (`#C86D32`), Steamed Microfoam (`#FFFFFF`), and Warm Oat Milk Canvas (`#FBF8F4`), delivering an artisanal yet clinical kitchen-counter aesthetic.
+These are planning judgments. They are not measured search volumes. Document 02 is still empty, and document 17 defines the numbers the site is allowed to print.
+
+1. **Recipes in grams.** Ranking pages often tell people to use tablespoons or fluid ounces. The launch calculators take coffee, water, dose, and yield in grams. Cup size may show millilitres and fl oz because that is how the empty vessel is sold.
+2. **The drink pairs people confuse.** Flat white, latte, cortado, cappuccino, macchiato, and americano are the comparison set. Volumes for those drinks are house defaults with regional notes, not a single official recipe. The keyword export is still pending, so this is not a traffic claim.
+3. **SVG for the launch cup.** Three.js stays out of P0. Mobile share is an assumption above 70 percent, not a measured 74 percent. Performance budgets are in document 17.
+4. **Design identity.** This project uses "Roaster's Craft": ink `#1A1412`, canvas `#FBF8F4`, button `#9A4316`. Crema `#C86D32` is a large mark and a drink layer. It is not the button color.
 
 ---
 
 ## 5. High-Level 90-Day Execution Trajectory
 
-* **Days 1–30 (Foundation & P0 Calculators):** Launch Astro static architecture, deploy 5 core mass-based brewing calculators (Ratio, Espresso, Cold Brew, V60, French Press), and publish 12 core drink landing pages with 2D vector composition visualizers.
-* **Days 31–60 (Interactive Lab & Comparison Engine):** Deploy the interactive 2D Coffee Lab builder, 15 side-by-side drink comparison pages (`/compare/cortado-vs-flat-white`), and dial-in extraction guides.
-* **Days 61–90 (3D Studio & Ecosystem Growth):** Introduce Three.js 3D exploded drink visualizer for desktop, exportable recipe cards, curated equipment buying guides, and roaster discovery links.
+The week-by-week list and the pass conditions live in document 17. In short:
+
+* **Days 1–30:** The 25 P0 URLs. Three calculators, 11 drink pages, five comparisons. V60 and French press are presets on the ratio calculator, not their own URLs. Doppio is a section of the espresso page.
+* **Days 31–60:** Paste the keyword export into document 02, or record that it is still missing. Fix recipe and contrast defects before adding pages.
+* **Days 61–90:** Review Search Console for the calculators and comparisons. The Lab, the dial-in compass, Three.js, and affiliate links are not in this window unless that review and the keyword export both support a P1 page.

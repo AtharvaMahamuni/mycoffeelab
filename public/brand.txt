@@ -1,0 +1,6 @@
+Name: MyCoffeeLab
+Publisher: Atharva Mahamuni
+What it is: Static coffee calculators and house-default drink recipes, in grams.
+Visual: Warm oat canvas #FBF8F4, ink #1A1412, button #9A4316. Crema #C86D32 is a mark and a drink layer, not button text.
+Voice: Short, specific, and willing to say when a number is a house default.
+Host: Not chosen. Placeholder origin https://mycoffeelab.example

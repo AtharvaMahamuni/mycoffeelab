@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import ColdBrewTool from "../../components/ColdBrewTool.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const description = "Cold brew concentrate or ready-to-drink ratio, minus water held by the grounds.";
+const path = "/calculators/cold-brew-ratio/";
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Cold brew ratio calculator" },
+];
+const jsonLd = graph(
+  personNode(),
+  appNode("Cold brew ratio calculator", path, description),
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: "Cold brew ratio calculator", path },
+  ]),
+);
+---
+
+<BaseLayout title="Cold brew ratio calculator" description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>Cold brew ratio calculator</h1>
+  <ColdBrewTool />
+</BaseLayout>

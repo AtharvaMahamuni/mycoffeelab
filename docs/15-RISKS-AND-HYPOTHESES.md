@@ -1,6 +1,7 @@
 # 15. Strategic Risks, Assumptions, and Unvalidated Hypotheses
 
-**Standard of Rigor:** In strict accordance with research quality guidelines, all assertions are classified as **[Observable Fact]**, **[Strategic Estimate]**, or **[Unvalidated Hypothesis]**. Every risk is paired with a concrete mitigation protocol and validation experiment.
+**Standard of Rigor:** In strict accordance with research quality guidelines, all assertions are classified as **[Observable Fact]**, **[Strategic Estimate]**, or **[Unvalidated Hypothesis]**. Every risk is paired with a concrete mitigation protocol and validation experiment.  
+**Experiments:** The three studies below need traffic P0 does not have. Their replacements are in [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md) section 9.3. Do not schedule a Reddit launch as a milestone.
 
 ---
 

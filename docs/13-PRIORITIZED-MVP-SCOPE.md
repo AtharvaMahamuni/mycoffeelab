@@ -1,6 +1,7 @@
 # 13. Prioritisation Framework & MVP Scope Definition
 
-**Objective:** Strict sequencing of features and pages to maximize launch velocity, immediate search indexation, and user retention while minimizing initial development complexity.
+**Objective:** Strict sequencing of features and pages.  
+**Launch lock:** The scored table below is a planning aid from before the build specification. Where a tier, a URL, or a "full WCAG AAA" line disagrees with [17-BUILD-SPECIFICATION.md](./17-BUILD-SPECIFICATION.md), document 17 wins. The formula was never the sort order: the Coffee Lab scores near the P0 comparisons and remains out of launch.
 
 ---
 
@@ -51,23 +52,16 @@ $$\text{Priority Score} = \frac{(\text{Demand} \times 2) + (\text{User Value} \t
 
 The MVP represents the tightest scope capable of winning organic search rankings, earning initial backlink authority, and validating daily repeat user engagement:
 
-### Scope Included in MVP (Days 1–45)
-1. **Core Architectural Foundation:** Astro 5.x SSG + Tailwind CSS + strict TypeScript + lightweight Nanostores.
-2. **The "Roaster's Craft" Design System:** High-contrast espresso-and-crema visual identity; zero cursor orange; full WCAG AAA compliance.
-3. **P0 Tools (Zero-Friction Mass Calculators):**
-   - Coffee-to-Water Ratio Calculator (with 1:15, 1:16, 1:17 SCA presets and animated carafe).
-   - Espresso Ratio & Yield Calculator (with dose input, ratio slider, and shot-time target).
-   - Cold Brew Ratio Calculator (Concentrate vs Ready-to-Drink toggle).
-4. **P0 Drink Dossiers (12 Core Pages):**
-   - Espresso, Double Espresso (Doppio), Ristretto, Lungo, Americano, Cortado, Flat White, Cappuccino, Café Latte, Macchiato, Mocha, Cold Brew.
-   - Every page features an interactive 2D SVG cup cross-section, exact mass recipe, and step-by-step brew card.
-5. **P0 Comparison Engine (5 Core Comparisons):**
-   - Flat White vs Latte
-   - Cortado vs Flat White
-   - Macchiato vs Cortado
-   - Cappuccino vs Latte
-   - Espresso vs Americano
-6. **Technical SEO Engine:** Automated XML sitemap, clean Schema.org structured data (`WebApplication`, `Article`, `FAQPage`), OpenGraph dynamic preview cards, and standard AI discovery files (`llms.txt`, `robots.txt`).
+### Scope Included in MVP
+
+The page list, the recipes, and the pass checks are section 2 and section 8 of document 17. In short:
+
+1. Astro static pages, TypeScript, CSS custom properties. A client island only where a slider changes the cup.
+2. Roaster's Craft tokens as corrected in the palette: body text at AAA, buttons at AA. Crema amber is not the button fill.
+3. Three calculators: coffee to water, espresso ratio, cold brew. The SCA default is 55 g/L (1:18.2), not a 1:15–1:17 set labeled as SCA.
+4. Eleven drink pages. Doppio is an H2 on the espresso page. Recipes are the house defaults in document 17.
+5. Five comparisons, ending in espresso vs americano. Reverse slugs redirect.
+6. Sitemap, `robots.txt`, `llms.txt`, and the JSON-LD types listed in document 17. `FAQPage` only when the questions are visible. No nutrition field.
 
 ### Scope Excluded from MVP (Deferred to P1/P2)
 * Heavy 3D Three.js WebGL rendering (P2).

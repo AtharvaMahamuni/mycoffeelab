@@ -1,0 +1,10 @@
+{
+  "name": "MyCoffeeLab",
+  "publisher": "Atharva Mahamuni",
+  "description": "Static coffee calculators and house-default drink recipes in grams.",
+  "origin": "https://mycoffeelab.example",
+  "allowsSearch": true,
+  "allowsTraining": false,
+  "sendsRecipeData": false,
+  "hasAccounts": false
+}

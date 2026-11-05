@@ -1,0 +1,30 @@
+---
+import type { Drink } from "../lib/drinks";
+import { presentDrink } from "../lib/drinks";
+import { drinkCup } from "../lib/cup";
+import { cupLabel, vessels } from "../lib/picture";
+
+interface Props {
+  drink: Drink;
+}
+
+const { drink } = Astro.props;
+const vessel = vessels[drink.vesselId];
+const { result, lines } = presentDrink(drink);
+const label = cupLabel(drink.name, drink.recipe, vessel, result);
+---
+
+<div class="stage">
+  <div class="cup-slot" set:html={drinkCup(drink.vesselId, result, label)} />
+  <dl class="recipe">
+    {
+      lines.map((line) => (
+        <div>
+          <dt>{line.term}</dt>
+          <dd>{line.detail}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</div>
+<p class="note">{drink.drawingNote}</p>
