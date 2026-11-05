@@ -53,6 +53,7 @@ This repository contains the complete 16-part strategic, competitive, and techni
 | **18** | [Implementation Plan](./docs/18-IMPLEMENTATION-PLAN.md) | What the Astro app builds, where the math lives, and which checks must pass. |
 | **19** | [Motion & 3D Specification](./docs/19-MOTION-SCROLL-3D-SPEC.md) | Architectural spec for motion graphics, scroll-driven extraction scrollytelling, Three.js 3D Studio, and fluid pouring mechanics. |
 | **20** | [Layer Visualization & Club Brand Identity](./docs/20-LAYER-VISUALIZATION-AND-PREMIUM-CLUB-BRANDING.md) | Creative solutions for comparison height disparity (Architectural Vitrine, Stratum Pillars, Exploded Discs) and luxury old-school club aesthetic. |
+| **21** | [Guided User Journey & Simplified Calculators](./docs/21-GUIDED-JOURNEY-AND-SIMPLIFIED-CALCULATORS.md) | Dual-layer calculator architecture (Kitchen Practical vs Precision Lab), 3-question Drink Matchmaker, and glossary tooltips. |
 | **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, measured contrast, and layer visualizer hex codes. |
 
 ---
