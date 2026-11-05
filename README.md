@@ -57,6 +57,7 @@ This repository contains the complete 16-part strategic, competitive, and techni
 | **22** | [Calculator Opportunity Catalog & Visual Formulations](./docs/22-CALCULATOR-OPPORTUNITY-CATALOG.md) | Exhaustive catalog of 11 new calculators (Caffeine half-life, Espresso dial-in compass, Grind microns, SCA TDS, Iced flash brew, Calorie macros, Home ROI). |
 | **23** | [Motion Graphics Simulators & Caffeine Pharmacokinetics](./docs/23-MOTION-GRAPHICS-SIMULATORS-AND-CAFFEINE-SPEC.md) | Deep motion graphic architecture for the Circadian Caffeine Half-Life & Sleep Simulator, plus 5 additional coffee physics simulators. |
 | **24** | [Caffeine Half-Life Calculator & Q&A Strategy](./docs/24-CAFFEINE-HALF-LIFE-CALCULATOR-SPEC.md) | Product spec, mathematical pharmacokinetic engine, and 15 high-intent Q&A clusters designed for Google Featured Snippets and AI search. |
+| **25** | [Master Unified Implementation Plan](./docs/25-MASTER-UNIFIED-IMPLEMENTATION-PLAN.md) | The single unified master roadmap synthesizing all 8 phases: luxury club branding, vitrine layer fix, guided concierge, caffeine calculator, motion graphics, and 3D studio. |
 | **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, measured contrast, and layer visualizer hex codes. |
 
 ---
