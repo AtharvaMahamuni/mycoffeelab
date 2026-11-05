@@ -4,6 +4,7 @@ import ComparisonVerdict from "../../components/ComparisonVerdict.astro";
 import ComparisonVitrine from "../../components/ComparisonVitrine.astro";
 import { comparisons, pairDrinks } from "../../lib/comparisons";
 import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+import { url } from "../../lib/site";
 
 export function getStaticPaths() {
   return comparisons.map((comparison) => ({
@@ -29,6 +30,8 @@ const jsonLd = graph(
     { name: comparison.h1, path },
   ]),
 );
+
+const otherComparisons = comparisons.filter((c) => c.slug !== comparison.slug);
 ---
 
 <BaseLayout title={comparison.h1} description={comparison.sentence} path={path} crumbs={crumbs} jsonLd={jsonLd}>
@@ -38,4 +41,64 @@ const jsonLd = graph(
   <ComparisonVerdict pairSlug={comparison.slug} leftName={left.h1} rightName={right.h1} />
 
   <ComparisonVitrine left={left} right={right} />
+
+  <!-- Connected Tools & Action Console -->
+  <div class="lab-console" style="margin-top: 24px;">
+    <div class="console-header">
+      <span class="eyebrow">✦ Connected Barista Station ✦</span>
+      <h3 style="margin: 0; font-size: 18px;">Brew &amp; Experiment with Both Drinks</h3>
+      <p style="margin: 2px 0 0; font-size: 13px; color: var(--muted);">Direct tools to calculate ratios, dial in extraction, or compare custom pairs</p>
+    </div>
+    <div class="console-actions">
+      <a href={url(left.calculatorHref)} class="button" style="text-decoration: none;">
+        ⚖️ Brew {left.h1} on Calculator
+      </a>
+      <a href={url(right.calculatorHref)} class="button" style="text-decoration: none;">
+        ⚖️ Brew {right.h1} on Calculator
+      </a>
+      <a href={url("/compare/")} class="button-quiet" style="text-decoration: none;">
+        🔬 Open Interactive Comparator
+      </a>
+      <a href={url("/#3d-explorer")} class="button-quiet" style="text-decoration: none;">
+        💥 3D Layer Studio
+      </a>
+    </div>
+  </div>
+
+  <!-- Other Comparisons -->
+  <div style="margin-top: 32px;">
+    <h2>More Coffee Drink Comparisons</h2>
+    <ul class="card-list">
+      {
+        otherComparisons.map((c) => (
+          <li>
+            <a href={url(`/compare/${c.slug}/`)}>
+              <strong>{c.h1}</strong>
+              <p>{c.sentence}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
 </BaseLayout>
+
+<style>
+  .lab-console {
+    background: var(--surface);
+    border: 1.5px solid var(--primary);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 4px 12px rgba(23, 18, 16, 0.04);
+  }
+
+  .console-header {
+    margin-bottom: 12px;
+  }
+
+  .console-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+</style>

@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
 import DrinkFigure from "../../components/DrinkFigure.astro";
-import { drinks } from "../../lib/drinks";
+import { comparisons } from "../../lib/comparisons";
+import { drinks, presentDrink } from "../../lib/drinks";
+import { vessels } from "../../lib/picture";
 import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
 import { url } from "../../lib/site";
 
@@ -10,6 +12,16 @@ export function getStaticPaths() {
 }
 
 const { drink } = Astro.props;
+const vessel = vessels[drink.vesselId];
+const { result } = presentDrink(drink);
+const drawnMl = Math.round(result.drawnMl);
+const milkMl = drink.recipe.milkG > 0 ? Math.round(drink.recipe.milkG / 1.03) : 0;
+
+// Curate related comparisons for this drink
+const relatedComparisons = comparisons.filter(
+  (c) => c.left === drink.slug || c.right === drink.slug,
+);
+
 const path = `/drinks/${drink.slug}/`;
 const crumbs = [
   { href: "/", label: "Home" },
@@ -31,11 +43,76 @@ const jsonLd = graph(
   <h1>{drink.h1}</h1>
   <p class="status">{drink.status}. <a href={url("/corrections/")}>See the assumption log.</a></p>
   <p class="lede">{drink.definition}</p>
+
+  <!-- At-a-glance Dense Spec Ribbon -->
+  <div class="spec-ribbon">
+    <div class="spec-pill">
+      <span class="spec-label">Vessel</span>
+      <span class="spec-val">{vessel.label} ({vessel.capacityMl} mL)</span>
+    </div>
+    <div class="spec-pill">
+      <span class="spec-label">Total Liquid</span>
+      <span class="spec-val">{drawnMl} mL</span>
+    </div>
+    <div class="spec-pill">
+      <span class="spec-label">Espresso Core</span>
+      <span class="spec-val">{drink.recipe.yieldG > 0 ? `${drink.recipe.yieldG.toFixed(1)} g` : "None"}</span>
+    </div>
+    <div class="spec-pill">
+      <span class="spec-label">Steamed Milk</span>
+      <span class="spec-val">{milkMl > 0 ? `${milkMl} mL` : drink.recipe.waterG > 0 ? `${drink.recipe.waterG} g H2O` : "None"}</span>
+    </div>
+  </div>
+
   <DrinkFigure drink={drink} />
-  <p><a href={url(drink.calculatorHref)}>Open this recipe in the calculator</a></p>
-  <p>{drink.range}</p>
+
+  <!-- Lab Brew Console & Connected Tools Bridge -->
+  <div class="lab-console">
+    <div class="console-header">
+      <span class="eyebrow">✦ Connected Lab Instruments ✦</span>
+      <h3 style="margin: 0; font-size: 18px;">Brew &amp; Analyze This Recipe</h3>
+      <p style="margin: 2px 0 0; font-size: 13px; color: var(--muted);">Direct integration with calibrated extraction calculators and visualizers</p>
+    </div>
+    <div class="console-actions">
+      <a href={url(drink.calculatorHref)} class="button" style="text-decoration: none;">
+        ⚖️ Open Recipe in Calculator
+      </a>
+      <a href={url("/compare/")} class="button-quiet" style="text-decoration: none;">
+        🔬 Compare in Interactive Vitrine
+      </a>
+      <a href={url("/#3d-explorer")} class="button-quiet" style="text-decoration: none;">
+        💥 Inspect 3D Dimensional Model
+      </a>
+    </div>
+  </div>
+
+  <!-- Dial-In Calibration Parameters -->
+  <div class="dialin-card">
+    <h3 style="margin: 0 0 8px; font-size: 18px;">Dial-In &amp; Formulation Benchmarks</h3>
+    <p style="margin: 0 0 12px; font-size: 14px; color: var(--ink-secondary);">{drink.range}</p>
+    <div class="dialin-grid">
+      <div class="dialin-item">
+        <span class="dialin-label">Standard Dose In</span>
+        <span class="dialin-value">{drink.recipe.doseG > 0 ? `${drink.recipe.doseG.toFixed(1)} g` : "Varies"}</span>
+      </div>
+      <div class="dialin-item">
+        <span class="dialin-label">Extraction Yield</span>
+        <span class="dialin-value">{drink.recipe.yieldG > 0 ? `${drink.recipe.yieldG.toFixed(1)} g` : "Cold brew concentrate"}</span>
+      </div>
+      <div class="dialin-item">
+        <span class="dialin-label">Brew Ratio</span>
+        <span class="dialin-value">{drink.recipe.doseG > 0 && drink.recipe.yieldG > 0 ? `1:${(drink.recipe.yieldG / drink.recipe.doseG).toFixed(1)}` : "Batch steeping"}</span>
+      </div>
+      <div class="dialin-item">
+        <span class="dialin-label">Target Temp</span>
+        <span class="dialin-value">{drink.recipe.milkG > 0 ? "93°C water / 65°C milk" : drink.slug === "cold-brew" ? "4°C–18°C cold" : "92°C–94°C water"}</span>
+      </div>
+    </div>
+  </div>
+
   <h2>A different version of this name</h2>
   <p>{drink.variant}</p>
+
   {
     drink.sections.map((section) => (
       <>
@@ -44,15 +121,134 @@ const jsonLd = graph(
       </>
     ))
   }
+
+  <!-- Curated Comparisons Section -->
+  {
+    relatedComparisons.length > 0 && (
+      <div style="margin-top: 28px;">
+        <h2>Architectural Comparisons for {drink.name}</h2>
+        <p>Explore side-by-side volume and ratio differences against close counterparts:</p>
+        <ul class="card-list">
+          {relatedComparisons.map((c) => (
+            <li>
+              <a href={url(`/compare/${c.slug}/`)}>
+                <strong>{c.h1}</strong>
+                <p>{c.sentence}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
   {
     drink.links.length > 0 && (
-      <ul class="card-list">
-        {drink.links.map((link) => (
-          <li>
-            <a href={url(link.href)}>{link.label}</a>
-          </li>
-        ))}
-      </ul>
+      <div style="margin-top: 28px;">
+        <h2>Related Coffee Drinks</h2>
+        <ul class="card-list">
+          {drink.links.map((link) => (
+            <li>
+              <a href={url(link.href)}>{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
     )
   }
 </BaseLayout>
+
+<style>
+  .spec-ribbon {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin: 12px 0 16px;
+    padding: 10px 14px;
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+  }
+
+  .spec-pill {
+    display: flex;
+    flex-direction: column;
+    min-width: 100px;
+  }
+
+  .spec-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .spec-val {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+
+  .lab-console {
+    background: var(--surface);
+    border: 1.5px solid var(--primary);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin: 20px 0;
+    box-shadow: 0 4px 12px rgba(23, 18, 16, 0.04);
+  }
+
+  .console-header {
+    margin-bottom: 12px;
+  }
+
+  .console-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .dialin-card {
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .dialin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+  }
+
+  .dialin-item {
+    background: var(--surface);
+    border: 1px solid var(--hairline-soft);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+
+  .dialin-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .dialin-value {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+</style>

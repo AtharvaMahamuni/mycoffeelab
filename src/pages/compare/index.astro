@@ -1,10 +1,11 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
+import CoffeeComparator from "../../components/CoffeeComparator.astro";
 import { comparisons } from "../../lib/comparisons";
 import { breadcrumbNode, graph, personNode } from "../../lib/schema";
 import { url } from "../../lib/site";
 
-const description = "Five coffee drink comparisons, drawn on one scale.";
+const description = "Compare coffee drinks side-by-side in true-scale glassware with interactive metrics and recipes.";
 const crumbs = [
   { href: "/", label: "Home" },
   { label: "Coffee drink comparisons" },
@@ -20,12 +21,19 @@ const jsonLd = graph(
 
 <BaseLayout title="Coffee drink comparisons" description={description} path="/compare/" crumbs={crumbs} jsonLd={jsonLd}>
   <h1>Coffee drink comparisons</h1>
+  <p class="lede">Select any two coffee drinks to inspect their stratified volume, brew ratio, microfoam aeration, and tactile profile side-by-side.</p>
+
+  <CoffeeComparator />
+
+  <h2>Curated Editorial Comparisons</h2>
+  <p>In-depth architectural breakdowns of the five most commonly debated coffee pairings:</p>
+
   <ul class="card-list">
     {
       comparisons.map((comparison) => (
         <li>
           <a href={url(`/compare/${comparison.slug}/`)}>
-            {comparison.h1}
+            <strong>{comparison.h1}</strong>
             <p>{comparison.sentence}</p>
           </a>
         </li>

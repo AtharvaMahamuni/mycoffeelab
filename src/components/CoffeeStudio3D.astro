@@ -2,56 +2,63 @@
 import { url } from "../lib/site";
 ---
 
-<div class="specimen-folio studio-folio" data-coffee-studio>
+<div class="specimen-folio studio-folio" data-coffee-studio id="3d-explorer">
   <div class="folio-header">
     <span class="eyebrow">✦ Interactive 3D Dimensional Studio ✦</span>
     <h2 class="folio-title" style="font-size: 26px;">3D Coffee Explorer &amp; Layer Teardown</h2>
-    <p class="vitrine-meta">Orbit 360° in 3D space and explode physical liquid strata along the vertical axis</p>
+    <p class="vitrine-meta">Orbit 360° in 3D space, inspect top-down foam meniscus, and explode physical liquid strata</p>
   </div>
 
   <div class="controls" style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-      <button type="button" class="button" data-vessel="cortado" aria-pressed="true">Cortado (Gibraltar)</button>
-      <button type="button" class="button-quiet" data-vessel="flatwhite">Flat White (Ceramic 6)</button>
-      <button type="button" class="button-quiet" data-vessel="latte">Caffè Latte (Tumbler)</button>
-      <button type="button" class="button-quiet" data-vessel="espresso">Espresso (Demitasse)</button>
+    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+      <button type="button" class="button" data-vessel="cortado" aria-pressed="true">Cortado</button>
+      <button type="button" class="button-quiet" data-vessel="flatwhite">Flat White</button>
+      <button type="button" class="button-quiet" data-vessel="latte">Caffè Latte</button>
+      <button type="button" class="button-quiet" data-vessel="cappuccino">Cappuccino</button>
+      <button type="button" class="button-quiet" data-vessel="espresso">Espresso</button>
     </div>
 
-    <div>
-      <button type="button" class="button" data-toggle-explode style="background: #a46830;">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+      <div class="camera-presets" style="display: flex; gap: 4px;">
+        <button type="button" class="button-quiet" data-cam="iso" title="3/4 Isometric View" style="padding: 6px 10px; font-size: 13px;">✦ 3/4 View</button>
+        <button type="button" class="button-quiet" data-cam="top" title="Top Meniscus View" style="padding: 6px 10px; font-size: 13px;">☕ Top View</button>
+        <button type="button" class="button-quiet" data-cam="side" title="Side Elevation View" style="padding: 6px 10px; font-size: 13px;">📐 Profile</button>
+      </div>
+
+      <button type="button" class="button" data-toggle-explode style="background: #a46830; padding: 8px 12px; font-size: 13px;">
         💥 Explode Layers
       </button>
     </div>
   </div>
 
   <!-- 3D Canvas Stage -->
-  <div style="position: relative; width: 100%; height: 380px; background: radial-gradient(circle at 50% 40%, rgba(250, 247, 242, 0.8) 0%, rgba(237, 230, 220, 0.95) 100%); border: 1px solid var(--hairline); border-radius: 8px; overflow: hidden; margin: 16px 0; touch-action: none;">
-    <canvas data-studio-canvas width="800" height="450" style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
+  <div style="position: relative; width: 100%; height: 380px; background: radial-gradient(circle at 50% 35%, rgba(250, 247, 242, 0.9) 0%, rgba(235, 227, 215, 0.95) 100%); border: 1px solid var(--hairline); border-radius: 8px; overflow: hidden; margin: 16px 0; touch-action: none;">
+    <canvas data-studio-canvas style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
 
     <!-- Interactive Hint Overlay -->
-    <div style="position: absolute; bottom: 12px; left: 16px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); pointer-events: none;">
-      Drag to rotate 360° · Scroll to zoom
+    <div style="position: absolute; bottom: 10px; left: 14px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); pointer-events: none; background: rgba(250, 247, 242, 0.85); padding: 2px 6px; border-radius: 4px;">
+      Drag / Swipe to orbit · Pinch to zoom
     </div>
 
     <!-- Exploded Callout Annotations -->
-    <div data-hud-foam style="position: absolute; top: 22%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+    <div data-hud-foam style="position: absolute; top: 18%; right: 14%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
       <strong style="color: #c86d32; display: block;">[ MICROFOAM CAP ]</strong>
-      <span>1.2 cm · Density: 0.35 g/cm³</span>
+      <span data-hud-foam-val>1.2 cm · Density: 0.35 g/cm³</span>
     </div>
 
-    <div data-hud-milk style="position: absolute; top: 48%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+    <div data-hud-milk style="position: absolute; top: 46%; right: 14%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
       <strong style="color: #6b5c54; display: block;">[ TEXTURED WHOLE MILK ]</strong>
-      <span>130 mL · 65°C</span>
+      <span data-hud-milk-val>36 mL · 65°C</span>
     </div>
 
-    <div data-hud-espresso style="position: absolute; bottom: 20%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+    <div data-hud-espresso style="position: absolute; bottom: 18%; right: 14%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
       <strong style="color: #171210; display: block;">[ DOUBLE ESPRESSO ]</strong>
-      <span>36.0 g · 9.2% TDS · 1:2.0</span>
+      <span data-hud-espresso-val>36.0 g · 9.2% TDS · 1:2.0</span>
     </div>
   </div>
 
   <p class="live" data-live aria-live="polite">
-    3D Coffee Studio: Gibraltar glass with 36 g espresso, 60 mL steamed milk, and microfoam cap.
+    3D Coffee Studio: Gibraltar glass with 36 g espresso, 36 mL steamed milk, and 0.5 cm microfoam cap.
   </p>
 </div>
 
@@ -61,8 +68,11 @@ import { url } from "../lib/site";
     if (!root) return;
     const canvas = root.querySelector<HTMLCanvasElement>("[data-studio-canvas]");
     const hudFoam = root.querySelector<HTMLElement>("[data-hud-foam]");
+    const hudFoamVal = root.querySelector<HTMLElement>("[data-hud-foam-val]");
     const hudMilk = root.querySelector<HTMLElement>("[data-hud-milk]");
+    const hudMilkVal = root.querySelector<HTMLElement>("[data-hud-milk-val]");
     const hudEspresso = root.querySelector<HTMLElement>("[data-hud-espresso]");
+    const hudEspressoVal = root.querySelector<HTMLElement>("[data-hud-espresso-val]");
     const explodeBtn = root.querySelector<HTMLButtonElement>("[data-toggle-explode]");
     const live = root.querySelector<HTMLElement>("[data-live]");
 
@@ -70,51 +80,160 @@ import { url } from "../lib/site";
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let rotX = 0.25; // tilt
-    let rotY = 0.4;  // azimuth
+    let rotX = 0.25; // tilt [0.12 - 0.42]
+    let rotY = 0.35; // azimuth
     let zoom = 1.0;
+    let targetRotX = 0.25;
+    let targetRotY = 0.35;
     let isDragging = false;
     let lastMouseX = 0;
     let lastMouseY = 0;
     let isExploded = false;
-    let explodeAnim = 0.0; // 0.0 to 1.0
+    let explodeAnim = 0.0;
     let currentDrink = "cortado";
 
-    // Drink layer configurations
-    const DRINK_CONFIGS: Record<string, { topR: number; botR: number; height: number; espressoH: number; milkH: number; foamH: number }> = {
-      cortado: { topR: 68, botR: 50, height: 120, espressoH: 35, milkH: 70, foamH: 15 },
-      flatwhite: { topR: 80, botR: 52, height: 130, espressoH: 35, milkH: 80, foamH: 15 },
-      latte: { topR: 74, botR: 48, height: 180, espressoH: 35, milkH: 125, foamH: 20 },
-      espresso: { topR: 54, botR: 38, height: 60, espressoH: 45, milkH: 0, foamH: 15 },
+    // Drink layer configurations calibrated for authentic proportional visualization
+    const DRINK_CONFIGS: Record<string, {
+      name: string;
+      topR: number;
+      botR: number;
+      height: number;
+      espressoH: number;
+      milkH: number;
+      foamH: number;
+      foamDesc: string;
+      milkDesc: string;
+      espressoDesc: string;
+      liveDesc: string;
+    }> = {
+      cortado: {
+        name: "Cortado (Gibraltar)",
+        topR: 66,
+        botR: 50,
+        height: 120,
+        espressoH: 42,
+        milkH: 42,
+        foamH: 14,
+        foamDesc: "0.5 cm · Density: 0.38 g/cm³",
+        milkDesc: "36 mL · 65°C · 1:1 ratio",
+        espressoDesc: "36.0 g Doppio · 1:2 extraction",
+        liveDesc: "3D Coffee Studio: Gibraltar glass with 36 g espresso, 36 mL steamed milk, and 0.5 cm microfoam cap.",
+      },
+      flatwhite: {
+        name: "Flat White (Ceramic 6)",
+        topR: 78,
+        botR: 52,
+        height: 128,
+        espressoH: 34,
+        milkH: 74,
+        foamH: 14,
+        foamDesc: "0.5 cm microfoam · Flat velvety rim",
+        milkDesc: "110 mL whole milk · micro-aerated",
+        espressoDesc: "36.0 g Doppio · High clarity",
+        liveDesc: "3D Coffee Studio: Ceramic 6 cup with 36 g espresso, 110 mL steamed milk, and 0.5 cm flat microfoam.",
+      },
+      latte: {
+        name: "Caffè Latte (Tumbler)",
+        topR: 74,
+        botR: 48,
+        height: 165,
+        espressoH: 28,
+        milkH: 110,
+        foamH: 18,
+        foamDesc: "1.0 cm microfoam · Light aeration",
+        milkDesc: "180 mL steamed milk · Gentle sweetness",
+        espressoDesc: "36.0 g Doppio · Mellowed",
+        liveDesc: "3D Coffee Studio: Tall tumbler with 36 g espresso, 180 mL steamed milk, and 1.0 cm microfoam.",
+      },
+      cappuccino: {
+        name: "Cappuccino (Cup)",
+        topR: 76,
+        botR: 50,
+        height: 130,
+        espressoH: 34,
+        milkH: 52,
+        foamH: 38,
+        foamDesc: "2.0 cm domed wet foam · Cushioned cap",
+        milkDesc: "60 mL steamed milk · Warm body",
+        espressoDesc: "36.0 g Doppio · Rich contrast",
+        liveDesc: "3D Coffee Studio: Traditional cup with 36 g espresso, 60 mL steamed milk, and 2.0 cm domed foam cap.",
+      },
+      espresso: {
+        name: "Espresso (Demitasse)",
+        topR: 56,
+        botR: 40,
+        height: 68,
+        espressoH: 48,
+        milkH: 0,
+        foamH: 16,
+        foamDesc: "0.3 cm tiger-skin crema · CO2 emulsion",
+        milkDesc: "None (Pure extraction)",
+        espressoDesc: "36.0 g Doppio · 9.2% TDS · 1:2.0 ratio",
+        liveDesc: "3D Coffee Studio: Demitasse with 36 g double espresso and hazelnut crema cap.",
+      },
     };
+
+    function updateHud(cfg: (typeof DRINK_CONFIGS)[string]) {
+      if (hudFoamVal) hudFoamVal.textContent = cfg.foamDesc;
+      if (hudMilkVal) hudMilkVal.textContent = cfg.milkDesc;
+      if (hudEspressoVal) hudEspressoVal.textContent = cfg.espressoDesc;
+    }
+
+    function resizeCanvas() {
+      if (!canvas) return 1;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = Math.round(rect.width * dpr);
+      const h = Math.round(rect.height * dpr);
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      return dpr;
+    }
 
     function render() {
       if (!ctx || !canvas) return;
+      const dpr = resizeCanvas();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Smooth camera interpolation
+      rotX += (targetRotX - rotX) * 0.14;
+      rotY += (targetRotY - rotY) * 0.14;
 
       const cfg = DRINK_CONFIGS[currentDrink] || DRINK_CONFIGS.cortado;
       const cx = canvas.width / 2;
-      const cy = canvas.height / 2 + 30;
+      const cy = canvas.height / 2 + 20 * dpr;
+
+      // Proportional scale factor suited for mobile and desktop screens
+      const baseScale = Math.min(canvas.width / (460 * dpr), canvas.height / (420 * dpr)) * zoom * dpr;
 
       // Smooth explode animation interpolation
       const targetAnim = isExploded ? 1.0 : 0.0;
       explodeAnim += (targetAnim - explodeAnim) * 0.12;
 
-      const explodeOffsetFoam = explodeAnim * 65;
-      const explodeOffsetMilk = explodeAnim * 30;
+      const explodeOffsetFoam = explodeAnim * 62 * baseScale;
+      const explodeOffsetMilk = explodeAnim * 28 * baseScale;
 
-      // Draw Glassware Shadow
+      const topR = cfg.topR * baseScale;
+      const botR = cfg.botR * baseScale;
+      const totalH = cfg.height * baseScale;
+      const hEspresso = cfg.espressoH * baseScale;
+      const hMilk = cfg.milkH * baseScale;
+      const hFoam = cfg.foamH * baseScale;
+
+      // 1. Draw Cast Soft Shadow
       ctx.save();
-      ctx.translate(cx, cy + cfg.height / 2 + 10);
-      ctx.scale(1, 0.35);
+      ctx.translate(cx, cy + totalH / 2 + 12 * baseScale);
+      ctx.scale(1, Math.max(0.22, Math.sin(rotX) * 1.1));
       ctx.beginPath();
-      ctx.arc(0, 0, cfg.botR * 1.3, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(23, 18, 16, 0.12)";
-      ctx.filter = "blur(8px)";
+      ctx.arc(0, 0, botR * 1.35, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(23, 18, 16, 0.10)";
+      ctx.filter = "blur(10px)";
       ctx.fill();
       ctx.restore();
 
-      // Helper function to project 3D cylinder slice
+      // Helper function to project cylinder slice
       function drawCylinderSlice(
         yBottom: number,
         yTop: number,
@@ -122,91 +241,140 @@ import { url } from "../lib/site";
         rTop: number,
         fillColor: string,
         strokeColor: string,
+        isTopLayer: boolean = false,
       ) {
         if (!ctx) return;
-        const cosY = Math.cos(rotY);
-        const sinY = Math.sin(rotY);
-        const cosX = Math.cos(rotX);
-        const sinX = Math.sin(rotX);
-
         const yb = cy - yBottom;
         const yt = cy - yTop;
-
-        // Front half-cylinder path
-        ctx.save();
-        ctx.beginPath();
-
-        // Bottom ellipse (tilted by rotX)
         const bRy = rBottom * Math.sin(rotX);
         const tRy = rTop * Math.sin(rotX);
 
+        ctx.save();
+        ctx.beginPath();
+
+        // Bottom curved rim
         ctx.ellipse(cx, yb, rBottom, Math.abs(bRy), 0, 0, Math.PI);
         ctx.lineTo(cx - rTop, yt);
         ctx.ellipse(cx, yt, rTop, Math.abs(tRy), 0, Math.PI, 0, true);
         ctx.closePath();
 
-        ctx.fillStyle = fillColor;
+        // Shaded side gradient for cylindrical depth
+        const sideGrad = ctx.createLinearGradient(cx - rTop, yt, cx + rTop, yt);
+        sideGrad.addColorStop(0, strokeColor);
+        sideGrad.addColorStop(0.25, fillColor);
+        sideGrad.addColorStop(0.7, fillColor);
+        sideGrad.addColorStop(1, strokeColor);
+
+        ctx.fillStyle = sideGrad;
         ctx.fill();
         ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1.2 * dpr;
         ctx.stroke();
 
-        // Top cap ellipse
+        // Top cap ellipse (Meniscus)
         ctx.beginPath();
         ctx.ellipse(cx, yt, rTop, Math.abs(tRy), 0, 0, Math.PI * 2);
-        ctx.fillStyle = fillColor;
+
+        if (isTopLayer) {
+          // Rich radial gradient for authentic top meniscus view
+          const meniscusGrad = ctx.createRadialGradient(
+            cx - rTop * 0.18,
+            yt - tRy * 0.18,
+            rTop * 0.08,
+            cx,
+            yt,
+            rTop,
+          );
+          if (cfg.milkH > 0) {
+            // Textured microfoam surface with delicate crema halo
+            meniscusGrad.addColorStop(0, "#ffffff");
+            meniscusGrad.addColorStop(0.65, "#faf5ed");
+            meniscusGrad.addColorStop(0.92, "#e6d5bf");
+            meniscusGrad.addColorStop(1, "#c89d70");
+          } else {
+            // Espresso tiger crema surface
+            meniscusGrad.addColorStop(0, "#df9a56");
+            meniscusGrad.addColorStop(0.5, "#b86f32");
+            meniscusGrad.addColorStop(0.9, "#7a3712");
+            meniscusGrad.addColorStop(1, "#3c1705");
+          }
+          ctx.fillStyle = meniscusGrad;
+        } else {
+          ctx.fillStyle = fillColor;
+        }
+
         ctx.fill();
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1.0 * dpr;
         ctx.stroke();
+
+        // Subtle inner specular crescent ring for realistic liquid surface
+        if (isTopLayer) {
+          ctx.beginPath();
+          ctx.ellipse(cx, yt, rTop * 0.88, Math.abs(tRy) * 0.88, 0, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+          ctx.lineWidth = 1.0 * dpr;
+          ctx.stroke();
+        }
+
         ctx.restore();
       }
 
-      // Calculate geometry heights
-      const hEspresso = cfg.espressoH;
-      const hMilk = cfg.milkH;
-      const hFoam = cfg.foamH;
+      const r0 = botR;
+      const r1 = r0 + (topR - r0) * (hEspresso / totalH);
+      const r2 = r0 + (topR - r0) * ((hEspresso + hMilk) / totalH);
+      const r3 = topR;
 
-      const r0 = cfg.botR;
-      const r1 = r0 + (cfg.topR - r0) * (hEspresso / cfg.height);
-      const r2 = r0 + (cfg.topR - r0) * ((hEspresso + hMilk) / cfg.height);
-      const r3 = cfg.topR;
+      const base0 = -totalH / 2;
 
-      // 1. Layer: Espresso Base (anchored at y = -cfg.height/2)
-      const base0 = -cfg.height / 2;
-      drawCylinderSlice(base0, base0 + hEspresso, r0, r1, "#28160c", "#171210");
+      // 1. Espresso Strata (Rich dark roast core)
+      drawCylinderSlice(base0, base0 + hEspresso, r0, r1, "#26150c", "#170c06", hMilk === 0 && hFoam === 0);
 
-      // 2. Layer: Steamed Milk (floating when exploded)
+      // 2. Steamed Whole Milk Strata (warm ivory)
       if (hMilk > 0) {
         const milk0 = base0 + hEspresso + explodeOffsetMilk;
-        drawCylinderSlice(milk0, milk0 + hMilk, r1, r2, "#f4efe6", "#d9cec1");
+        drawCylinderSlice(milk0, milk0 + hMilk, r1, r2, "#f4efe6", "#d8cbba", false);
       }
 
-      // 3. Layer: Crema / Microfoam Cap (floating high when exploded)
+      // 3. Crema / Microfoam Cap
       const foam0 = base0 + hEspresso + hMilk + explodeOffsetFoam;
-      const foamColor = cfg.milkH > 0 ? "#fdfbf7" : "#c86d32";
-      const foamStroke = cfg.milkH > 0 ? "#e2d8cb" : "#9a4316";
-      drawCylinderSlice(foam0, foam0 + hFoam, r2, r3, foamColor, foamStroke);
+      const foamFill = cfg.milkH > 0 ? "#fcfaf6" : "#c86d32";
+      const foamStroke = cfg.milkH > 0 ? "#dfd3c3" : "#8c3b12";
+      drawCylinderSlice(foam0, foam0 + hFoam, r2, r3, foamFill, foamStroke, true);
 
-      // 4. Glassware Outer Shell (Translucent borosilicate with specular highlight)
-      if (explodeAnim < 0.8) {
+      // 4. Glassware Outer Vessel (Crystal Borosilicate with calibrated rim)
+      if (explodeAnim < 0.85) {
         ctx.save();
-        ctx.globalAlpha = 0.35 * (1.0 - explodeAnim);
+        ctx.globalAlpha = 0.4 * (1.0 - explodeAnim);
+        const rimPad = 5 * baseScale;
+        const gBotRy = (r0 + rimPad) * Math.sin(rotX);
+        const gTopRy = (r3 + rimPad) * Math.sin(rotX);
+
         ctx.beginPath();
-        const gBotRy = (r0 + 6) * Math.sin(rotX);
-        const gTopRy = (r3 + 6) * Math.sin(rotX);
-        ctx.ellipse(cx, cy - base0, r0 + 6, Math.abs(gBotRy), 0, 0, Math.PI);
-        ctx.lineTo(cx - (r3 + 6), cy - (base0 + cfg.height));
-        ctx.ellipse(cx, cy - (base0 + cfg.height), r3 + 6, Math.abs(gTopRy), 0, Math.PI, 0, true);
+        ctx.ellipse(cx, cy - base0, r0 + rimPad, Math.abs(gBotRy), 0, 0, Math.PI);
+        ctx.lineTo(cx - (r3 + rimPad), cy - (base0 + totalH));
+        ctx.ellipse(cx, cy - (base0 + totalH), r3 + rimPad, Math.abs(gTopRy), 0, Math.PI, 0, true);
         ctx.closePath();
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
-        ctx.lineWidth = 2.5;
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.95)";
+        ctx.lineWidth = 2.2 * dpr;
         ctx.stroke();
-        ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
         ctx.fill();
+
+        // Rim bevel highlight
+        ctx.beginPath();
+        ctx.ellipse(cx, cy - (base0 + totalH), r3 + rimPad, Math.abs(gTopRy), 0, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+        ctx.lineWidth = 1.8 * dpr;
+        ctx.stroke();
+
         ctx.restore();
       }
 
-      // HUD Annotations display when exploded
-      const showHud = explodeAnim > 0.4;
+      // Annotations display when exploded
+      const showHud = explodeAnim > 0.45;
       if (hudFoam) hudFoam.style.display = showHud ? "block" : "none";
       if (hudMilk) hudMilk.style.display = showHud && cfg.milkH > 0 ? "block" : "none";
       if (hudEspresso) hudEspresso.style.display = showHud ? "block" : "none";
@@ -214,9 +382,7 @@ import { url } from "../lib/site";
       requestAnimationFrame(render);
     }
 
-    render();
-
-    // Mouse & Touch Drag Controls
+    // Pointer Drag Controls
     canvas.addEventListener("pointerdown", (e) => {
       isDragging = true;
       lastMouseX = e.clientX;
@@ -232,8 +398,8 @@ import { url } from "../lib/site";
       lastMouseX = e.clientX;
       lastMouseY = e.clientY;
 
-      rotY += dx * 0.01;
-      rotX = Math.min(0.6, Math.max(0.1, rotX + dy * 0.005));
+      targetRotY += dx * 0.008;
+      targetRotX = Math.min(0.42, Math.max(0.12, targetRotX + dy * 0.004));
     });
 
     window.addEventListener("pointerup", () => {
@@ -241,18 +407,36 @@ import { url } from "../lib/site";
       canvas.style.cursor = "grab";
     });
 
-    // Explode Button Toggle
+    // Explode Button
     explodeBtn?.addEventListener("click", () => {
       isExploded = !isExploded;
-      explodeBtn.textContent = isExploded ? "📦 Restore Drink" : "💥 Explode Layers";
+      explodeBtn.textContent = isExploded ? "📦 Restore View" : "💥 Explode Layers";
       if (live) {
+        const cfg = DRINK_CONFIGS[currentDrink] || DRINK_CONFIGS.cortado;
         live.textContent = isExploded
-          ? "Exploded view: Microfoam cap, steamed milk, and double espresso separated along the vertical axis."
-          : "Standard 3D view: Finished drink in calibrated glassware.";
+          ? `Exploded 3D view: ${cfg.name} liquid strata separated vertically.`
+          : cfg.liveDesc;
       }
     });
 
-    // Vessel Switcher
+    // Camera Preset Buttons
+    root.querySelectorAll<HTMLButtonElement>("[data-cam]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const cam = btn.getAttribute("data-cam");
+        if (cam === "iso") {
+          targetRotX = 0.25;
+          targetRotY = 0.35;
+        } else if (cam === "top") {
+          targetRotX = 0.41;
+          targetRotY = 0.05;
+        } else if (cam === "side") {
+          targetRotX = 0.13;
+          targetRotY = 0.0;
+        }
+      });
+    });
+
+    // Drink Switcher Buttons
     root.querySelectorAll<HTMLButtonElement>("[data-vessel]").forEach((btn) => {
       btn.addEventListener("click", () => {
         root.querySelectorAll("[data-vessel]").forEach((b) => {
@@ -265,7 +449,13 @@ import { url } from "../lib/site";
         btn.classList.remove("button-quiet");
 
         currentDrink = btn.getAttribute("data-vessel") || "cortado";
+        const cfg = DRINK_CONFIGS[currentDrink] || DRINK_CONFIGS.cortado;
+        updateHud(cfg);
+        if (live) live.textContent = cfg.liveDesc;
       });
     });
+
+    updateHud(DRINK_CONFIGS.cortado);
+    render();
   })();
 </script>

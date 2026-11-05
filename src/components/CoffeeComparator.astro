@@ -1,0 +1,607 @@
+---
+import { comparisons } from "../lib/comparisons";
+import { drinkCup } from "../lib/cup";
+import { drinks, presentDrink } from "../lib/drinks";
+import { cupLabel, vessels } from "../lib/picture";
+import { url } from "../lib/site";
+
+const catalog = drinks.map((drink) => {
+  const vessel = vessels[drink.vesselId];
+  const { result, lines } = presentDrink(drink);
+  const label = cupLabel(drink.name, drink.recipe, vessel, result);
+  const svg = drinkCup(drink.vesselId, result, label);
+  const drawnMl = Math.round(result.drawnMl);
+  const milkMl = drink.recipe.milkG > 0 ? Math.round(drink.recipe.milkG / 1.03) : 0;
+  const waterMl = drink.recipe.waterG;
+  const espressoG = drink.recipe.yieldG;
+  const foamExpansion = drink.recipe.expansion > 1 ? Math.round((drink.recipe.expansion - 1) * 100) : 0;
+
+  return {
+    slug: drink.slug,
+    name: drink.name,
+    h1: drink.h1,
+    vesselId: drink.vesselId,
+    vesselLabel: `${vessel.label} · ${vessel.capacityMl} mL`,
+    capacityMl: vessel.capacityMl,
+    definition: drink.definition,
+    range: drink.range,
+    svg,
+    lines,
+    recipe: drink.recipe,
+    drawnMl,
+    milkMl,
+    waterMl,
+    espressoG,
+    foamExpansion,
+    pageHref: url(`/drinks/${drink.slug}/`),
+    calculatorHref: url(drink.calculatorHref),
+  };
+});
+
+const pairMap: Record<string, string> = {};
+for (const c of comparisons) {
+  pairMap[`${c.left}:${c.right}`] = url(`/compare/${c.slug}/`);
+  pairMap[`${c.right}:${c.left}`] = url(`/compare/${c.slug}/`);
+}
+---
+
+<div class="specimen-folio comparator-folio" data-coffee-comparator>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Interactive Architectural Vitrine ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">Side-by-Side Coffee Comparator</h2>
+    <p class="vitrine-meta">Compare any two coffee drinks side-by-side in true-scale glassware with live metric differential</p>
+  </div>
+
+  <!-- Selector Controls -->
+  <div class="comparator-controls">
+    <div class="selector-card left-card">
+      <label for="comp-select-left" class="selector-label">Coffee Specimen 1</label>
+      <div class="select-wrapper">
+        <select id="comp-select-left" data-select-left class="drink-select">
+          {catalog.map((d) => (
+            <option value={d.slug} selected={d.slug === "cortado"}>
+              {d.name} ({d.drawnMl} mL)
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    <div class="comparator-vs" aria-hidden="true">
+      <span>VS</span>
+    </div>
+
+    <div class="selector-card right-card">
+      <label for="comp-select-right" class="selector-label">Coffee Specimen 2</label>
+      <div class="select-wrapper">
+        <select id="comp-select-right" data-select-right class="drink-select">
+          {catalog.map((d) => (
+            <option value={d.slug} selected={d.slug === "flat-white"}>
+              {d.name} ({d.drawnMl} mL)
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Curated Quick Pairs -->
+  <div class="preset-pairs-row">
+    <span class="preset-label">Popular comparisons:</span>
+    <div class="preset-chips">
+      <button type="button" class="chip-button" data-pair="cortado:flat-white">Cortado vs Flat White</button>
+      <button type="button" class="chip-button" data-pair="flat-white:latte">Flat White vs Latte</button>
+      <button type="button" class="chip-button" data-pair="macchiato:cortado">Macchiato vs Cortado</button>
+      <button type="button" class="chip-button" data-pair="cappuccino:latte">Cappuccino vs Latte</button>
+      <button type="button" class="chip-button" data-pair="espresso:americano">Espresso vs Americano</button>
+    </div>
+  </div>
+
+  <!-- True-Scale Vitrine Stage -->
+  <div class="vitrine-stage" role="region" aria-label="Visual coffee comparison stage">
+    <!-- Left Vessel Column -->
+    <div class="vitrine-col left">
+      <div class="vitrine-glass" data-left-glass></div>
+      <div class="vitrine-plaque">
+        <a href="#" data-left-title class="drink-link"></a>
+        <span class="vitrine-meta" data-left-meta></span>
+      </div>
+    </div>
+
+    <!-- Metric Calibration Spine -->
+    <div class="metric-spine" aria-hidden="true">
+      <div class="spine-axis"></div>
+      <span class="spine-tick">300 mL</span>
+      <span class="spine-tick">240 mL</span>
+      <span class="spine-tick">180 mL</span>
+      <span class="spine-tick">133 mL</span>
+      <span class="spine-tick">60 mL</span>
+      <span class="spine-tick">0 mL</span>
+    </div>
+
+    <!-- Right Vessel Column -->
+    <div class="vitrine-col right">
+      <div class="vitrine-glass" data-right-glass></div>
+      <div class="vitrine-plaque">
+        <a href="#" data-right-title class="drink-link"></a>
+        <span class="vitrine-meta" data-right-meta></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Grounding Baseline Plinth -->
+  <div class="ground-plinth" aria-hidden="true"></div>
+
+  <!-- Differential Metrics Matrix -->
+  <div class="matrix-card">
+    <div class="matrix-header">
+      <h3 style="margin: 0; font-size: 16px;">Differential Architectural Matrix</h3>
+      <span class="vitrine-meta" data-diff-summary></span>
+    </div>
+    <div class="matrix-grid">
+      <div class="matrix-cell">
+        <span class="matrix-label">Total Liquid Volume</span>
+        <div class="matrix-row">
+          <span class="matrix-left" data-matrix-vol-left></span>
+          <span class="matrix-arrow">⇄</span>
+          <span class="matrix-right" data-matrix-vol-right></span>
+        </div>
+        <span class="matrix-subtext" data-matrix-vol-diff></span>
+      </div>
+
+      <div class="matrix-cell">
+        <span class="matrix-label">Espresso Extraction</span>
+        <div class="matrix-row">
+          <span class="matrix-left" data-matrix-esp-left></span>
+          <span class="matrix-arrow">⇄</span>
+          <span class="matrix-right" data-matrix-esp-right></span>
+        </div>
+        <span class="matrix-subtext" data-matrix-esp-diff></span>
+      </div>
+
+      <div class="matrix-cell">
+        <span class="matrix-label">Milk / Dilution Mass</span>
+        <div class="matrix-row">
+          <span class="matrix-left" data-matrix-milk-left></span>
+          <span class="matrix-arrow">⇄</span>
+          <span class="matrix-right" data-matrix-milk-right></span>
+        </div>
+        <span class="matrix-subtext" data-matrix-milk-diff></span>
+      </div>
+
+      <div class="matrix-cell">
+        <span class="matrix-label">Microfoam Aeration</span>
+        <div class="matrix-row">
+          <span class="matrix-left" data-matrix-foam-left></span>
+          <span class="matrix-arrow">⇄</span>
+          <span class="matrix-right" data-matrix-foam-right></span>
+        </div>
+        <span class="matrix-subtext" data-matrix-foam-diff></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Decision Verdict -->
+  <div class="verdict-box" data-verdict-box style="margin-top: 16px;">
+    <h3 style="margin: 0 0 6px; font-size: 18px;" data-verdict-heading>Architectural Verdict</h3>
+    <p style="margin: 0 0 10px;" data-verdict-text></p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px;">
+      <a href="#" data-editorial-link class="button" style="padding: 8px 14px; font-size: 14px; display: none;">
+        📖 Read Full Editorial Guide
+      </a>
+      <a href="#" data-left-brew-link class="button-quiet" style="padding: 8px 12px; font-size: 13px;"></a>
+      <a href="#" data-right-brew-link class="button-quiet" style="padding: 8px 12px; font-size: 13px;"></a>
+    </div>
+  </div>
+
+  <!-- Synchronized Horizontal Comparative Ledger -->
+  <div class="vitrine-ledger">
+    <div class="ledger-box">
+      <h3 data-left-ledger-heading style="margin: 0 0 10px; font-size: 17px;"></h3>
+      <dl class="recipe" data-left-recipe></dl>
+    </div>
+    <div class="ledger-box">
+      <h3 data-right-ledger-heading style="margin: 0 0 10px; font-size: 17px;"></h3>
+      <dl class="recipe" data-right-recipe></dl>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite" style="margin-top: 12px; font-size: 13px; color: var(--muted);"></p>
+</div>
+
+<!-- Serialized Catalog & Client Controller -->
+<script define:vars={{ catalog, pairMap }}>
+  (() => {
+    const root = document.querySelector("[data-coffee-comparator]");
+    if (!root) return;
+
+    const selectLeft = root.querySelector("[data-select-left]");
+    const selectRight = root.querySelector("[data-select-right]");
+
+    const leftGlass = root.querySelector("[data-left-glass]");
+    const rightGlass = root.querySelector("[data-right-glass]");
+    const leftTitle = root.querySelector("[data-left-title]");
+    const rightTitle = root.querySelector("[data-right-title]");
+    const leftMeta = root.querySelector("[data-left-meta]");
+    const rightMeta = root.querySelector("[data-right-meta]");
+
+    const diffSummary = root.querySelector("[data-diff-summary]");
+    const volLeft = root.querySelector("[data-matrix-vol-left]");
+    const volRight = root.querySelector("[data-matrix-vol-right]");
+    const volDiff = root.querySelector("[data-matrix-vol-diff]");
+    const espLeft = root.querySelector("[data-matrix-esp-left]");
+    const espRight = root.querySelector("[data-matrix-esp-right]");
+    const espDiff = root.querySelector("[data-matrix-esp-diff]");
+    const milkLeft = root.querySelector("[data-matrix-milk-left]");
+    const milkRight = root.querySelector("[data-matrix-milk-right]");
+    const milkDiff = root.querySelector("[data-matrix-milk-diff]");
+    const foamLeft = root.querySelector("[data-matrix-foam-left]");
+    const foamRight = root.querySelector("[data-matrix-foam-right]");
+    const foamDiff = root.querySelector("[data-matrix-foam-diff]");
+
+    const verdictHeading = root.querySelector("[data-verdict-heading]");
+    const verdictText = root.querySelector("[data-verdict-text]");
+    const editorialLink = root.querySelector("[data-editorial-link]");
+    const leftBrewLink = root.querySelector("[data-left-brew-link]");
+    const rightBrewLink = root.querySelector("[data-right-brew-link]");
+
+    const leftLedgerHeading = root.querySelector("[data-left-ledger-heading]");
+    const rightLedgerHeading = root.querySelector("[data-right-ledger-heading]");
+    const leftRecipe = root.querySelector("[data-left-recipe]");
+    const rightRecipe = root.querySelector("[data-right-recipe]");
+    const live = root.querySelector("[data-live]");
+
+    const drinkMap = new Map(catalog.map((d) => [d.slug, d]));
+
+    function renderDl(lines) {
+      return lines
+        .map(
+          (line) => `<div><dt style="font-weight: 600; color: var(--ink);">${line.term}</dt><dd style="margin: 0; color: var(--ink-secondary); font-variant-numeric: tabular-nums;">${line.detail}</dd></div>`,
+        )
+        .join("");
+    }
+
+    function update() {
+      const leftSlug = selectLeft.value;
+      const rightSlug = selectRight.value;
+      const left = drinkMap.get(leftSlug);
+      const right = drinkMap.get(rightSlug);
+      if (!left || !right) return;
+
+      // Update glasses
+      if (leftGlass) leftGlass.innerHTML = left.svg;
+      if (rightGlass) rightGlass.innerHTML = right.svg;
+
+      // Update plaques
+      if (leftTitle) {
+        leftTitle.textContent = left.h1;
+        leftTitle.href = left.pageHref;
+      }
+      if (rightTitle) {
+        rightTitle.textContent = right.h1;
+        rightTitle.href = right.pageHref;
+      }
+      if (leftMeta) leftMeta.textContent = left.vesselLabel;
+      if (rightMeta) rightMeta.textContent = right.vesselLabel;
+
+      // Update Matrix
+      if (volLeft) volLeft.textContent = `${left.drawnMl} mL`;
+      if (volRight) volRight.textContent = `${right.drawnMl} mL`;
+      if (volDiff) {
+        if (left.drawnMl === right.drawnMl) {
+          volDiff.textContent = "Identical total cup volume";
+        } else {
+          const bigger = left.drawnMl > right.drawnMl ? left : right;
+          const smaller = left.drawnMl > right.drawnMl ? right : left;
+          const ratio = (bigger.drawnMl / Math.max(smaller.drawnMl, 1)).toFixed(1);
+          volDiff.textContent = `${bigger.name} is ${ratio}× the volume of ${smaller.name}`;
+        }
+      }
+
+      if (espLeft) espLeft.textContent = left.espressoG > 0 ? `${left.espressoG.toFixed(1)} g` : "None";
+      if (espRight) espRight.textContent = right.espressoG > 0 ? `${right.espressoG.toFixed(1)} g` : "None";
+      if (espDiff) {
+        if (left.espressoG === right.espressoG) {
+          espDiff.textContent = "Matching espresso yield";
+        } else if (left.espressoG > 0 && right.espressoG > 0) {
+          espDiff.textContent = `${(left.espressoG / right.espressoG).toFixed(2)}:1 extraction ratio`;
+        } else {
+          espDiff.textContent = "Different brew methodologies";
+        }
+      }
+
+      if (milkLeft) milkLeft.textContent = left.milkMl > 0 ? `${left.milkMl} mL` : left.waterMl > 0 ? `${left.waterMl} g H2O` : "None";
+      if (milkRight) milkRight.textContent = right.milkMl > 0 ? `${right.milkMl} mL` : right.waterMl > 0 ? `${right.waterMl} g H2O` : "None";
+      if (milkDiff) {
+        if (left.milkMl > 0 && right.milkMl > 0) {
+          const ratio = (Math.max(left.milkMl, right.milkMl) / Math.min(left.milkMl, right.milkMl)).toFixed(1);
+          const more = left.milkMl > right.milkMl ? left.name : right.name;
+          milkDiff.textContent = `${more} contains ${ratio}× more milk`;
+        } else if (left.milkMl > 0 || right.milkMl > 0) {
+          const milkDrink = left.milkMl > 0 ? left.name : right.name;
+          milkDiff.textContent = `${milkDrink} incorporates steamed dairy; counterpart does not`;
+        } else {
+          milkDiff.textContent = "Black coffee / water-based profiles";
+        }
+      }
+
+      if (foamLeft) foamLeft.textContent = left.recipe.cremaMm ? `${left.recipe.cremaMm} mm crema` : left.foamExpansion > 0 ? `+${left.foamExpansion}% aerated` : "Flat";
+      if (foamRight) foamRight.textContent = right.recipe.cremaMm ? `${right.recipe.cremaMm} mm crema` : right.foamExpansion > 0 ? `+${right.foamExpansion}% aerated` : "Flat";
+      if (foamDiff) {
+        if (left.foamExpansion > right.foamExpansion) {
+          foamDiff.textContent = `${left.name} has deeper foam cushion`;
+        } else if (right.foamExpansion > left.foamExpansion) {
+          foamDiff.textContent = `${right.name} has deeper foam cushion`;
+        } else {
+          foamDiff.textContent = "Similar head structure & mouthfeel";
+        }
+      }
+
+      // Dynamic Verdict
+      if (verdictHeading) verdictHeading.textContent = `${left.name} vs ${right.name}: Decision Verdict`;
+      if (verdictText) {
+        if (left.slug === right.slug) {
+          verdictText.textContent = `Select two distinct coffee specimens to analyze tactile, volumetric, and strength variances.`;
+        } else if (left.milkMl > 0 && right.milkMl > 0) {
+          const strong = left.drawnMl < right.drawnMl ? left : right;
+          const mild = left.drawnMl < right.drawnMl ? right : left;
+          verdictText.textContent = `Choose ${strong.name} for bold, punchy espresso character with concentrated dairy texture. Choose ${mild.name} for a mellower, dessert-like sipping experience where steamed milk sweetens the profile.`;
+        } else if (left.milkMl === 0 && right.milkMl === 0) {
+          verdictText.textContent = `Both drinks highlight unadulterated coffee roast notes. ${left.name} delivers ${left.definition.toLowerCase()} while ${right.name} offers ${right.definition.toLowerCase()}`;
+        } else {
+          const milk = left.milkMl > 0 ? left : right;
+          const pure = left.milkMl > 0 ? right : left;
+          verdictText.textContent = `Choose ${pure.name} for pure origin acidity and espresso roast punch. Choose ${milk.name} when seeking silky microfoam sweetness and thermal insulation.`;
+        }
+      }
+
+      // Check Editorial Guide link
+      const pairKey = `${left.slug}:${right.slug}`;
+      const guideUrl = pairMap[pairKey];
+      if (editorialLink) {
+        if (guideUrl) {
+          editorialLink.style.display = "inline-flex";
+          editorialLink.href = guideUrl;
+          editorialLink.textContent = `📖 Read Full Editorial Guide: ${left.name} vs ${right.name} →`;
+        } else {
+          editorialLink.style.display = "none";
+        }
+      }
+
+      if (leftBrewLink) {
+        leftBrewLink.href = left.calculatorHref;
+        leftBrewLink.textContent = `⚖️ Brew ${left.name} Recipe`;
+      }
+      if (rightBrewLink) {
+        rightBrewLink.href = right.calculatorHref;
+        rightBrewLink.textContent = `⚖️ Brew ${right.name} Recipe`;
+      }
+
+      // Ledgers
+      if (leftLedgerHeading) leftLedgerHeading.textContent = `${left.h1} Formulation`;
+      if (rightLedgerHeading) rightLedgerHeading.textContent = `${right.h1} Formulation`;
+      if (leftRecipe) leftRecipe.innerHTML = renderDl(left.lines);
+      if (rightRecipe) rightRecipe.innerHTML = renderDl(right.lines);
+
+      if (live) {
+        live.textContent = `Comparing ${left.name} (${left.drawnMl} mL) with ${right.name} (${right.drawnMl} mL).`;
+      }
+    }
+
+    selectLeft.addEventListener("change", update);
+    selectRight.addEventListener("change", update);
+
+    root.querySelectorAll("[data-pair]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const pair = btn.getAttribute("data-pair");
+        if (!pair) return;
+        const [l, r] = pair.split(":");
+        selectLeft.value = l;
+        selectRight.value = r;
+        update();
+      });
+    });
+
+    update();
+  })();
+</script>
+
+<style>
+  .comparator-folio {
+    margin: 24px 0;
+  }
+
+  .comparator-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  @media (min-width: 680px) {
+    .comparator-controls {
+      grid-template-columns: 1fr auto 1fr;
+    }
+  }
+
+  .selector-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 6px rgba(23, 18, 16, 0.03);
+  }
+
+  .selector-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brass);
+    margin-bottom: 6px;
+  }
+
+  .select-wrapper {
+    position: relative;
+  }
+
+  .drink-select {
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 12px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 140ms var(--ease);
+  }
+
+  .drink-select:focus {
+    border-color: var(--primary);
+  }
+
+  .comparator-vs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .comparator-vs span {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--brass);
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    padding: 6px 10px;
+    border-radius: 50%;
+  }
+
+  .preset-pairs-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+
+  .preset-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .preset-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip-button {
+    min-height: 32px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    background: var(--canvas-soft);
+    color: var(--ink-secondary);
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 120ms var(--ease);
+  }
+
+  .chip-button:hover {
+    background: var(--surface);
+    color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  /* Differential Matrix */
+  .matrix-card {
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .matrix-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--hairline-soft);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+  }
+
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  @media (min-width: 600px) {
+    .matrix-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .matrix-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .matrix-cell {
+    background: var(--surface);
+    border: 1px solid var(--hairline-soft);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+
+  .matrix-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .matrix-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .matrix-arrow {
+    font-size: 11px;
+    color: var(--brass);
+    padding: 0 4px;
+  }
+
+  .matrix-subtext {
+    display: block;
+    font-size: 11px;
+    color: var(--ink-secondary);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+</style>
