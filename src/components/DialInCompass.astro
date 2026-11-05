@@ -1,0 +1,107 @@
+---
+---
+
+<div class="specimen-folio" data-dial-in-tool>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Sensory Barista Diagnostics ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">Espresso Dial-In Diagnostic Compass</h2>
+    <p class="vitrine-meta">Troubleshoot sour, bitter, or fast-running shots with precision flow diagnostics</p>
+  </div>
+
+  <div class="controls">
+    <div style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      <div class="field">
+        <label for="dial-dose">Dry Coffee Dose (g)</label>
+        <input id="dial-dose" data-dial-dose type="number" min="14" max="22" step="0.5" value="18.0" />
+      </div>
+
+      <div class="field">
+        <label for="dial-yield">Liquid Espresso Yield (g)</label>
+        <input id="dial-yield" data-dial-yield type="number" min="20" max="60" step="1" value="36.0" />
+      </div>
+
+      <div class="field">
+        <label for="dial-time">Extraction Shot Time (seconds): <strong data-display-time>27s</strong></label>
+        <input id="dial-time" data-dial-time type="range" min="12" max="45" step="1" value="27" />
+      </div>
+    </div>
+
+    <fieldset class="choices">
+      <legend>Primary Taste Sensation in Cup</legend>
+      <label class="choice"><input type="radio" name="dial-taste" value="sour" /> 🍋 Sour / Sharp / Acidic (Fast)</label>
+      <label class="choice"><input type="radio" name="dial-taste" value="balanced" checked /> 🍯 Sweet / Balanced / Silky (Ideal)</label>
+      <label class="choice"><input type="radio" name="dial-taste" value="bitter" /> ☕ Bitter / Harsh / Astringent (Slow)</label>
+    </fieldset>
+  </div>
+
+  <!-- The Diagnostic Answer Box -->
+  <div class="practical-answer" data-dial-verdict style="border-color: #a46830;">
+    <span class="eyebrow" data-dial-badge>✦ EXTRACTION BALANCED ✦</span>
+    <div class="practical-measure" data-dial-flow>Flow Rate: 1.33 g/s · Ratio 1:2.0</div>
+    <p data-dial-prescription style="margin: 0 0 12px; color: var(--ink-secondary); font-size: 15px;">
+      Optimal extraction balance. Sweet core, rich hazelnut crema, and balanced fruit acidity. Keep grinder settings locked.
+    </p>
+
+    <div style="display: grid; gap: 8px; font-size: 14px; padding-top: 10px; border-top: 1px solid var(--hairline-soft);">
+      <div>• <strong>Flow Rate Target:</strong> Standard 9-bar espresso targets 1.1 to 1.5 g/s.</div>
+      <div>• <strong>Next Shot Adjustment:</strong> <strong data-dial-action>No change needed. Repeat puck prep.</strong></div>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite">
+    18.0 g dose yielding 36.0 g in 27 seconds produces a 1.33 g/s flow rate with balanced extraction.
+  </p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-dial-in-tool]");
+  if (root) {
+    const doseInput = root.querySelector<HTMLInputElement>("[data-dial-dose]");
+    const yieldInput = root.querySelector<HTMLInputElement>("[data-dial-yield]");
+    const timeSlider = root.querySelector<HTMLInputElement>("[data-dial-time]");
+    const displayTime = root.querySelector<HTMLElement>("[data-display-time]");
+    const badgeEl = root.querySelector<HTMLElement>("[data-dial-badge]");
+    const flowEl = root.querySelector<HTMLElement>("[data-dial-flow]");
+    const prescEl = root.querySelector<HTMLElement>("[data-dial-prescription]");
+    const actionEl = root.querySelector<HTMLElement>("[data-dial-action]");
+    const live = root.querySelector<HTMLElement>("[data-live]");
+
+    function update() {
+      const dose = Number(doseInput?.value) || 18.0;
+      const yieldG = Number(yieldInput?.value) || 36.0;
+      const timeS = Number(timeSlider?.value) || 27;
+      const taste = root.querySelector<HTMLInputElement>('input[name="dial-taste"]:checked')?.value || "balanced";
+
+      if (displayTime) displayTime.textContent = `${timeS}s`;
+
+      const flowRate = yieldG / Math.max(1, timeS);
+      const ratio = yieldG / Math.max(1, dose);
+
+      if (flowEl) flowEl.textContent = `Flow Rate: ${flowRate.toFixed(2)} g/s · Ratio 1:${ratio.toFixed(1)}`;
+
+      if (timeS < 22 || taste === "sour") {
+        if (badgeEl) badgeEl.textContent = "✦ UNDER-EXTRACTED / FLOW TOO FAST ✦";
+        if (prescEl) prescEl.textContent = "Water is rushing through the coffee bed too quickly without extracting sweet sugars, resulting in sour, grassy, or sharp acidity.";
+        if (actionEl) actionEl.textContent = "Grind 1 to 2 notches finer. Keep dose at 18.0 g. Target 25 to 30 seconds.";
+        if (live) live.textContent = `Under-extracted shot: ${flowRate.toFixed(2)} g/s is too fast. Grind finer.`;
+      } else if (timeS > 33 || taste === "bitter") {
+        if (badgeEl) badgeEl.textContent = "✦ OVER-EXTRACTED / CHANNELING RISK ✦";
+        if (prescEl) prescEl.textContent = "Water is stalled in the bed too long or channeling through fissures, leaching out dry astringent tannins and bitter ash.";
+        if (actionEl) actionEl.textContent = "Grind 1 to 2 notches coarser. Check puck levelness before tamping.";
+        if (live) live.textContent = `Over-extracted shot: ${flowRate.toFixed(2)} g/s is too slow. Grind coarser.`;
+      } else {
+        if (badgeEl) badgeEl.textContent = "✦ EXTRACTION BALANCED ✦";
+        if (prescEl) prescEl.textContent = "Optimal extraction window. Sweet caramel and chocolate notes with harmonious acidity and velvety body.";
+        if (actionEl) actionEl.textContent = "Keep grinder settings locked. Repeat distribution prep.";
+        if (live) live.textContent = `Balanced extraction: ${flowRate.toFixed(2)} g/s is in the golden 9-bar zone.`;
+      }
+    }
+
+    doseInput?.addEventListener("input", update);
+    yieldInput?.addEventListener("input", update);
+    timeSlider?.addEventListener("input", update);
+    root.querySelectorAll('input[name="dial-taste"]').forEach((r) => r.addEventListener("change", update));
+
+    update();
+  }
+</script>

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
+import CoffeeStudio3D from "../components/CoffeeStudio3D.astro";
+import DrinkMatchmaker from "../components/DrinkMatchmaker.astro";
 import RatioTool from "../components/RatioTool.astro";
 import { appNode, graph, personNode, websiteNode } from "../lib/schema";
 import { url } from "../lib/site";
@@ -13,12 +15,62 @@ const jsonLd = graph(
 ---
 
 <BaseLayout title="Coffee ratio calculator" description={description} path="/" jsonLd={jsonLd}>
-  <h1>Coffee ratio calculator</h1>
-  <RatioTool />
-  <h2>Drinks and comparisons</h2>
+  <div class="folio-header" style="text-align: left; margin: 12px 0 20px;">
+    <span class="eyebrow">✦ The Specialty Coffee Guild &amp; Precision Laboratory ✦</span>
+    <h1>Coffee ratio calculator</h1>
+    <p class="lede" style="margin-top: 4px;">{description}</p>
+  </div>
+
+  <!-- Three Navigational Entry Doors -->
+  <div class="doors-grid" role="navigation" aria-label="Quick platform doors">
+    <a href="#quick-brew" class="door-card">
+      <span class="door-icon">⚖️</span>
+      <h3>Kitchen Brew Coach</h3>
+      <p>Zero math. Everyday tablespoons, mugs, and a 3-step walkthrough.</p>
+    </a>
+    <a href="#matchmaker" class="door-card">
+      <span class="door-icon">☕</span>
+      <h3>Drink Matchmaker</h3>
+      <p>Answer 3 quick questions to discover your ideal coffee drink.</p>
+    </a>
+    <a href="#studio-3d" class="door-card">
+      <span class="door-icon">🔬</span>
+      <h3>3D Coffee Explorer</h3>
+      <p>Orbit glassware in 3D and explode liquid strata along the Y-axis.</p>
+    </a>
+  </div>
+
+  <div id="quick-brew">
+    <RatioTool />
+  </div>
+
+  <div id="matchmaker" style="margin-top: 40px;">
+    <DrinkMatchmaker />
+  </div>
+
+  <div id="studio-3d" style="margin-top: 40px;">
+    <CoffeeStudio3D />
+  </div>
+
+  <h2 style="margin-top: 40px;">Drinks, Comparisons &amp; Specialized Calculators</h2>
   <ul class="card-list">
-    <li><a href={url("/types-of-coffee/")}>Coffee drinks, in grams</a></li>
-    <li><a href={url("/compare/")}>Coffee drink comparisons</a></li>
-    <li><a href={url("/calculators/")}>Coffee calculators</a></li>
+    <li>
+      <a href={url("/types-of-coffee/")}>
+        Coffee drinks, in grams
+        <p>11 house-default recipes with calibrated glassware cross-sections.</p>
+      </a>
+    </li>
+    <li>
+      <a href={url("/compare/")}>
+        Coffee drink comparisons
+        <p>Architectural vitrines with shared groundlines and central metric spines.</p>
+      </a>
+    </li>
+    <li>
+      <a href={url("/calculators/")}>
+        Coffee calculators
+        <p>Ratio, espresso, cold brew, caffeine half-life, dial-in compass, and grind chart.</p>
+      </a>
+    </li>
   </ul>
 </BaseLayout>

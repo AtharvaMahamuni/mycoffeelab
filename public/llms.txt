@@ -7,6 +7,10 @@ MyCoffeeLab publishes coffee calculators and eleven house-default drink recipes.
 - [Coffee to water ratio](/calculators/coffee-to-water-ratio/): default is the SCA golden cup, 55 g per litre (about 1:18.2). 1:16 is a shop preset, not the SCA standard. Bloom water is part of the total.
 - [Espresso ratio](/calculators/espresso-ratio/): yield = dose × ratio. 18 g at 1:2 is 36 g. Shot time is a note, not a calculated law.
 - [Cold brew ratio](/calculators/cold-brew-ratio/): finished liquid subtracts water held by the grounds. Default retention is an assumption of 2 g water per 1 g coffee.
+- [Caffeine half-life calculator](/calculators/caffeine-half-life-calculator/): pharmacokinetic clearance decay model and sleep cutoff predictor based on biological half-life.
+- [Espresso dial-in calculator](/calculators/espresso-dial-in-calculator/): flow rate diagnostic tool for under-extracted sour or over-extracted bitter shots.
+- [Coffee grind size chart](/calculators/coffee-grind-size-chart/): universal particle micron converter for Fellow Ode, Baratza Encore, and Comandante.
+- [Iced coffee ratio calculator](/calculators/iced-coffee-calculator/): Japanese flash brew calculator partitioning 60% hot water and 40% ice.
 
 ## Drinks
 
@@ -14,8 +18,8 @@ House defaults live under /drinks/. A Gibraltar cortado is not a Spanish cortado
 
 ## Comparisons
 
-Five pairs under /compare/. The reverse slug redirects to the canonical pair.
+Five pairs under /compare/. Rendered inside calibrated architectural vitrines with a grounded baseline plinth and central metric ruler. The reverse slug redirects to the canonical pair.
 
-## Not on this site
+## Interactive Tools
 
-No caffeine figures, no energy figures, no accounts, no affiliate links, no 3D lab.
+Interactive 3D Coffee Studio and Drink Matchmaker available on the homepage. No user accounts required; all math runs client-side.

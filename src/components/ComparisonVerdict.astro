@@ -1,0 +1,55 @@
+---
+interface Props {
+  pairSlug: string;
+  leftName: string;
+  rightName: string;
+}
+
+const { pairSlug, leftName, rightName } = Astro.props;
+
+interface Decision {
+  leftWhen: string;
+  rightWhen: string;
+}
+
+const DECISIONS: Record<string, Decision> = {
+  "flat-white-vs-latte": {
+    leftWhen: "You want a stronger, punchier espresso flavor with velvety microfoam that coats your palate without excessive milk dilution (6 oz cup).",
+    rightWhen: "You prefer a milder, gentler, creamy morning drink with more warm milk volume (10 oz cup) and a light froth cap.",
+  },
+  "cortado-vs-flat-white": {
+    leftWhen: "You want an intense 1:1 ratio of espresso to warm milk in a compact glass (4.5 oz) that you can enjoy in 3 quick sips.",
+    rightWhen: "You want more silky steamed milk volume (6 oz ceramic cup) with micro-textured froth and room for latte art.",
+  },
+  "macchiato-vs-cortado": {
+    leftWhen: "You want an almost pure espresso hit (1.5 oz) kissed by just a single dollop of warm foam to soften the edge.",
+    rightWhen: "You want an equal balance (4.5 oz) where warm steamed milk fully cuts the acidity and rounds out the body.",
+  },
+  "cappuccino-vs-latte": {
+    leftWhen: "You love a thick, airy, pillowy foam mustache (1.5 cm foam head) with distinct espresso separation in a traditional 6 oz cup.",
+    rightWhen: "You prefer smooth, liquid steamed milk with a thin, silky microfoam surface in a larger 10 oz tumbler.",
+  },
+  "espresso-vs-americano": {
+    leftWhen: "You want uncompromised, syrupy, concentrated coffee with full crema, oils, and intense aromatic complexity.",
+    rightWhen: "You want the flavor notes of espresso stretched out into a full, drinkable mug with hot water, similar to drip coffee.",
+  },
+};
+
+const decision = DECISIONS[pairSlug] || {
+  leftWhen: `You prioritize the concentrated character and traditional balance of ${leftName}.`,
+  rightWhen: `You prefer the volume, texture, and milder balance of ${rightName}.`,
+};
+---
+
+<div class="verdict-box" role="region" aria-label="Which one to choose">
+  <span class="eyebrow">✦ Sommelier Decision Guide ✦</span>
+  <h2>Which one should you choose?</h2>
+  <ul>
+    <li>
+      <strong>Choose {leftName} if:</strong> {decision.leftWhen}
+    </li>
+    <li>
+      <strong>Choose {rightName} if:</strong> {decision.rightWhen}
+    </li>
+  </ul>
+</div>

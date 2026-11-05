@@ -26,7 +26,42 @@ const faq = [
 ---
 
 <div data-ratio-tool>
-  <div class="controls">
+  <!-- Dual-Layer Mode Toggle -->
+  <div class="mode-toggle" role="tablist" aria-label="Calculator experience level">
+    <button type="button" data-toggle-mode="kitchen" aria-pressed="true">✦ Kitchen Practical (Mugs &amp; Scoops)</button>
+    <button type="button" data-toggle-mode="lab" aria-pressed="false">🔬 Precision Scale (Grams)</button>
+  </div>
+
+  <!-- Kitchen Practical Mode Panel (Zero Algebra) -->
+  <div class="controls" data-mode-panel="kitchen">
+    <fieldset class="choices">
+      <legend>1. Choose Your Brewer</legend>
+      <label class="choice"><input type="radio" name="kitchen-brewer" value="mug" checked /> ☕ Ceramic Mug (300 mL)</label>
+      <label class="choice"><input type="radio" name="kitchen-brewer" value="french" /> 🫖 French Press (500 mL)</label>
+      <label class="choice"><input type="radio" name="kitchen-brewer" value="drip" /> ⚡ Drip Machine (800 mL)</label>
+      <label class="choice"><input type="radio" name="kitchen-brewer" value="v60" /> ⏳ Pour Over / V60 (350 mL)</label>
+    </fieldset>
+
+    <fieldset class="presets">
+      <legend>2. Flavour Strength</legend>
+      <button type="button" class="button-quiet" data-strength="light">Light &amp; Floral</button>
+      <button type="button" data-strength="balanced" aria-pressed="true">Smooth &amp; Balanced</button>
+      <button type="button" class="button-quiet" data-strength="bold">Rich &amp; Bold</button>
+    </fieldset>
+
+    <div class="practical-answer" data-kitchen-answer>
+      <h3>✦ Recommended Kitchen Recipe</h3>
+      <div class="practical-measure" data-kitchen-measure>2 rounded tablespoons (18.8 g) · 300 mL water</div>
+      <div class="step-flow">
+        <div class="step-item"><span class="step-num">Step 1:</span> <span>Add ground coffee to your brewer. Pour a splash of hot water (bloom) and wait 30 seconds.</span></div>
+        <div class="step-item"><span class="step-num">Step 2:</span> <span>Fill with water up to your mug line (300 mL).</span></div>
+        <div class="step-item"><span class="step-num">Step 3:</span> <span>Swirl gently, pour, and enjoy freshly brewed coffee!</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Precision Lab Mode Panel (Digital 0.1g Scale) -->
+  <div class="controls" data-mode-panel="lab" style="display: none;">
     <fieldset class="choices">
       <legend>Which mass do you know?</legend>
       <label class="choice"><input data-mode-water type="radio" name="brew-mode" value="water" checked /> Water</label>
@@ -63,6 +98,7 @@ const faq = [
     <p data-band-note>{RATIO_PRESETS.find((preset) => preset.id === "sca")?.note}</p>
     <p data-method-note></p>
   </div>
+
   <p class="live" data-live aria-live="polite">{initial.sentence}</p>
   <div class="stage">
     <div class="cup-slot" data-visual set:html={carafeMarkup(initial.coffeeG, initial.waterG)} />
@@ -85,8 +121,88 @@ const faq = [
     }
   </section>
 </div>
+
 <script>
   import { mountRatio } from "../scripts/ratio";
   const root = document.querySelector("[data-ratio-tool]");
-  if (root instanceof HTMLElement) mountRatio(root);
+  if (root instanceof HTMLElement) {
+    mountRatio(root);
+
+    // Kitchen Practical Toggle Logic
+    const toggleKitchen = root.querySelector<HTMLButtonElement>('[data-toggle-mode="kitchen"]');
+    const toggleLab = root.querySelector<HTMLButtonElement>('[data-toggle-mode="lab"]');
+    const panelKitchen = root.querySelector<HTMLElement>('[data-mode-panel="kitchen"]');
+    const panelLab = root.querySelector<HTMLElement>('[data-mode-panel="lab"]');
+    const kitchenMeasure = root.querySelector<HTMLElement>("[data-kitchen-measure]");
+    const waterInput = root.querySelector<HTMLInputElement>("#water-g");
+    const waterRange = root.querySelector<HTMLInputElement>("[data-water-range]");
+
+    toggleKitchen?.addEventListener("click", () => {
+      toggleKitchen.setAttribute("aria-pressed", "true");
+      toggleLab?.setAttribute("aria-pressed", "false");
+      if (panelKitchen) panelKitchen.style.display = "grid";
+      if (panelLab) panelLab.style.display = "none";
+    });
+
+    toggleLab?.addEventListener("click", () => {
+      toggleLab.setAttribute("aria-pressed", "true");
+      toggleKitchen?.setAttribute("aria-pressed", "false");
+      if (panelLab) panelLab.style.display = "grid";
+      if (panelKitchen) panelKitchen.style.display = "none";
+    });
+
+    // Sync Kitchen Brewer selections into the underlying water input
+    const BREWERS: Record<string, number> = {
+      mug: 300,
+      french: 500,
+      drip: 800,
+      v60: 350,
+    };
+
+    const STRENGTH_RATIO: Record<string, number> = {
+      light: 17.5,
+      balanced: 16.0,
+      bold: 14.5,
+    };
+
+    let currentBrewer = "mug";
+    let currentStrength = "balanced";
+
+    function updateKitchenRecipe() {
+      const waterMl = BREWERS[currentBrewer] || 300;
+      const ratio = STRENGTH_RATIO[currentStrength] || 16.0;
+      const coffeeG = waterMl / ratio;
+      const scoops = Math.round((coffeeG / 9.0) * 2) / 2; // ~9g per rounded tablespoon
+
+      if (kitchenMeasure) {
+        kitchenMeasure.textContent = `${scoops} rounded tablespoons (${coffeeG.toFixed(1)} g) · ${waterMl} mL water`;
+      }
+
+      if (waterInput && waterRange) {
+        waterInput.value = String(waterMl);
+        waterRange.value = String(Math.min(1000, waterMl));
+        waterInput.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    }
+
+    root.querySelectorAll<HTMLInputElement>('input[name="kitchen-brewer"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        currentBrewer = (e.target as HTMLInputElement).value;
+        updateKitchenRecipe();
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-strength]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        root.querySelectorAll("[data-strength]").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.classList.add("button-quiet");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.remove("button-quiet");
+        currentStrength = btn.getAttribute("data-strength") || "balanced";
+        updateKitchenRecipe();
+      });
+    });
+  }
 </script>

@@ -1,0 +1,142 @@
+---
+---
+
+<div class="specimen-folio" data-grind-chart>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Universal Calibration Engine ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">Coffee Grind Size &amp; Burr Micron Converter</h2>
+    <p class="vitrine-meta">Translate recipe microns to exact click settings on Fellow, Baratza, and Comandante</p>
+  </div>
+
+  <div class="controls">
+    <div class="field">
+      <label for="grind-micron-range">
+        Target Particle Size: <strong data-display-micron style="font-size: 18px; color: var(--primary);">700 μm (Medium)</strong>
+      </label>
+      <input id="grind-micron-range" data-micron-slider type="range" min="150" max="1400" step="25" value="700" />
+    </div>
+
+    <!-- Quick Method Buttons -->
+    <fieldset class="presets">
+      <legend>Quick Brewing Presets</legend>
+      <button type="button" class="button-quiet" data-set-micron="250">Espresso (250 μm)</button>
+      <button type="button" class="button-quiet" data-set-micron="450">Aeropress (450 μm)</button>
+      <button type="button" class="button" data-set-micron="700" aria-pressed="true">V60 Pour Over (700 μm)</button>
+      <button type="button" class="button-quiet" data-set-micron="850">Drip Machine (850 μm)</button>
+      <button type="button" class="button-quiet" data-set-micron="1100">French Press (1100 μm)</button>
+      <button type="button" class="button-quiet" data-set-micron="1350">Cold Brew (1350 μm)</button>
+    </fieldset>
+  </div>
+
+  <!-- Synchronized Grinder Dials Grid -->
+  <div class="practical-answer" style="border-color: #a46830;">
+    <span class="eyebrow">✦ SYNCHRONIZED BURR SETTINGS ✦</span>
+    <div class="practical-measure" data-grind-texture>Medium · Feels like coarse kosher salt</div>
+
+    <div style="display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 16px;">
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Baratza Encore</span>
+        <strong data-setting-baratza style="font-size: 20px; color: var(--ink);">Setting 14</strong>
+      </div>
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Fellow Ode Gen 2</span>
+        <strong data-setting-ode style="font-size: 20px; color: var(--ink);">Setting 4.1</strong>
+      </div>
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Comandante C40</span>
+        <strong data-setting-c40 style="font-size: 20px; color: var(--ink);">23 Clicks</strong>
+      </div>
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Timemore C2</span>
+        <strong data-setting-timemore style="font-size: 20px; color: var(--ink);">18 Clicks</strong>
+      </div>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite">
+    700 microns corresponds to medium grind, ideal for V60 pour over.
+  </p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-grind-chart]");
+  if (root) {
+    const slider = root.querySelector<HTMLInputElement>("[data-micron-slider]");
+    const displayMicron = root.querySelector<HTMLElement>("[data-display-micron]");
+    const textureEl = root.querySelector<HTMLElement>("[data-grind-texture]");
+    const baratzaEl = root.querySelector<HTMLElement>("[data-setting-baratza]");
+    const odeEl = root.querySelector<HTMLElement>("[data-setting-ode]");
+    const c40El = root.querySelector<HTMLElement>("[data-setting-c40]");
+    const timemoreEl = root.querySelector<HTMLElement>("[data-setting-timemore]");
+    const live = root.querySelector<HTMLElement>("[data-live]");
+
+    function update(microns: number) {
+      if (displayMicron) displayMicron.textContent = `${microns} μm`;
+
+      // Texture descriptors
+      let texture = "Medium · Feels like kosher salt";
+      let method = "V60 pour over";
+      if (microns < 300) {
+        texture = "Fine Powder · Feels like flour or fine powdered sugar";
+        method = "Espresso & Turkish";
+      } else if (microns < 500) {
+        texture = "Fine · Feels like fine table salt";
+        method = "Moka Pot & Aeropress";
+      } else if (microns < 800) {
+        texture = "Medium · Feels like coarse sea salt";
+        method = "V60 Pour Over & Chemex";
+      } else if (microns < 1000) {
+        texture = "Medium-Coarse · Feels like rough sand";
+        method = "Automatic Drip Machine";
+      } else {
+        texture = "Coarse · Feels like coarse breadcrumbs";
+        method = "French Press & Cold Brew";
+      }
+
+      if (textureEl) textureEl.textContent = `${texture} (Best for ${method})`;
+
+      // Grinder calibrations
+      // Baratza Encore has 40 settings (approx 200um at #1 to 1400um at #40 -> ~30um per step)
+      const baratza = Math.min(40, Math.max(1, Math.round((microns - 200) / 30) + 1));
+      if (baratzaEl) baratzaEl.textContent = `Setting ${baratza}`;
+
+      // Fellow Ode has 1.0 to 11.0 (approx 400um at 1.0 to 1200um at 11.0 -> ~80um per whole number)
+      const odeVal = Math.min(11, Math.max(1, (microns - 350) / 80 + 1));
+      if (odeEl) odeEl.textContent = `Setting ${odeVal.toFixed(1)}`;
+
+      // Comandante C40 has 30um per click (~8 to 36 clicks)
+      const c40Clicks = Math.min(36, Math.max(8, Math.round((microns - 100) / 30)));
+      if (c40El) c40El.textContent = `${c40Clicks} Clicks`;
+
+      // Timemore C2 has ~25um per click (~6 to 28 clicks)
+      const timeClicks = Math.min(28, Math.max(6, Math.round((microns - 150) / 32) + 6));
+      if (timemoreEl) timemoreEl.textContent = `${timeClicks} Clicks`;
+
+      if (live) live.textContent = `${microns} microns corresponds to ${texture.split("·")[0].trim().toLowerCase()} grind.`;
+    }
+
+    slider?.addEventListener("input", (e) => {
+      const val = Number((e.target as HTMLInputElement).value) || 700;
+      update(val);
+    });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-set-micron]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        root.querySelectorAll("[data-set-micron]").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.classList.add("button-quiet");
+          b.classList.remove("button");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.add("button");
+        btn.classList.remove("button-quiet");
+
+        const val = Number(btn.getAttribute("data-set-micron")) || 700;
+        if (slider) slider.value = String(val);
+        update(val);
+      });
+    });
+
+    update(700);
+  }
+</script>

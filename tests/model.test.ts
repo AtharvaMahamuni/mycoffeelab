@@ -108,3 +108,33 @@ describe("picture model", () => {
     expect(result.fits).toBe(false);
   });
 });
+
+describe("caffeine pharmacokinetics", () => {
+  it("computes peak and exponential half-life decay", async () => {
+    const { singleIntakeAtTime, evaluateSleepQuality, generateCaffeineSvgPath } = await import(
+      "../src/lib/caffeine"
+    );
+
+    // Peak at 45 mins (0.75 hrs) after 8.0 -> hour 8.75
+    const peak = singleIntakeAtTime(140, 8.0, 8.75, 5.0);
+    expect(Math.round(peak)).toBe(140);
+
+    // 5 hours after peak -> hour 13.75
+    const half = singleIntakeAtTime(140, 8.0, 13.75, 5.0);
+    expect(Math.round(half)).toBe(70);
+
+    // 10 hours after peak -> hour 18.75
+    const quarter = singleIntakeAtTime(140, 8.0, 18.75, 5.0);
+    expect(Math.round(quarter)).toBe(35);
+
+    // Sleep quality thresholds
+    expect(evaluateSleepQuality(30).level).toBe("protected");
+    expect(evaluateSleepQuality(75).level).toBe("warning");
+    expect(evaluateSleepQuality(120).level).toBe("alert");
+
+    // SVG wave path
+    const path = generateCaffeineSvgPath([{ doseMg: 140, intakeHour: 8.0 }], 5.0, 600, 200);
+    expect(path.startsWith("M")).toBe(true);
+    expect(path.endsWith("Z")).toBe(true);
+  });
+});

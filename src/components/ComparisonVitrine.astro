@@ -1,0 +1,98 @@
+---
+import type { Drink } from "../lib/drinks";
+import { presentDrink } from "../lib/drinks";
+import { drinkCup } from "../lib/cup";
+import { cupLabel, vessels } from "../lib/picture";
+import { url } from "../lib/site";
+
+interface Props {
+  left: Drink;
+  right: Drink;
+}
+
+const { left, right } = Astro.props;
+
+const leftVessel = vessels[left.vesselId];
+const rightVessel = vessels[right.vesselId];
+
+const leftData = presentDrink(left);
+const rightData = presentDrink(right);
+
+const leftLabel = cupLabel(left.name, left.recipe, leftVessel, leftData.result);
+const rightLabel = cupLabel(right.name, right.recipe, rightVessel, rightData.result);
+---
+
+<div class="specimen-folio">
+  <div class="folio-header">
+    <span class="eyebrow">✦ Comparative Architectural Vitrine ✦</span>
+    <p class="vitrine-meta">Calibrated True-Scale Glassware & Stratified Volume Comparison</p>
+  </div>
+
+  <div class="vitrine-stage" role="img" aria-label={`Comparison of ${left.name} and ${right.name}`}>
+    <!-- Left Glass Column -->
+    <div class="vitrine-col left">
+      <div class="vitrine-glass">
+        <div set:html={drinkCup(left.vesselId, leftData.result, leftLabel)} />
+      </div>
+      <div class="vitrine-plaque">
+        <a href={url(`/drinks/${left.slug}/`)}>{left.h1}</a>
+        <span class="vitrine-meta">{leftVessel.label} · {leftVessel.capacityMl} mL</span>
+      </div>
+    </div>
+
+    <!-- Center Metric Calibration Spine -->
+    <div class="metric-spine" aria-hidden="true">
+      <div class="spine-axis"></div>
+      <span class="spine-tick" style="align-self: center;">300 mL</span>
+      <span class="spine-tick" style="align-self: center;">240 mL</span>
+      <span class="spine-tick" style="align-self: center;">180 mL</span>
+      <span class="spine-tick" style="align-self: center;">133 mL</span>
+      <span class="spine-tick" style="align-self: center;">60 mL</span>
+      <span class="spine-tick" style="align-self: center;">0 mL</span>
+    </div>
+
+    <!-- Right Glass Column -->
+    <div class="vitrine-col right">
+      <div class="vitrine-glass">
+        <div set:html={drinkCup(right.vesselId, rightData.result, rightLabel)} />
+      </div>
+      <div class="vitrine-plaque">
+        <a href={url(`/drinks/${right.slug}/`)}>{right.h1}</a>
+        <span class="vitrine-meta">{rightVessel.label} · {rightVessel.capacityMl} mL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Grounding Baseline Plinth -->
+  <div class="ground-plinth" aria-hidden="true"></div>
+
+  <!-- Synchronized Horizontal Comparative Ledger -->
+  <div class="vitrine-ledger">
+    <div class="ledger-box">
+      <h3>{left.h1} Specification</h3>
+      <dl class="recipe">
+        {
+          leftData.lines.map((line) => (
+            <div>
+              <dt>{line.term}</dt>
+              <dd>{line.detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+    <div class="ledger-box">
+      <h3>{right.h1} Specification</h3>
+      <dl class="recipe">
+        {
+          rightData.lines.map((line) => (
+            <div>
+              <dt>{line.term}</dt>
+              <dd>{line.detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</div>

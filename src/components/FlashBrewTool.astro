@@ -1,0 +1,117 @@
+---
+---
+
+<div class="specimen-folio" data-flash-brew-tool>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Thermal Mass Equilibrium Engine ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">Iced Pour-Over &amp; Flash Brew Calculator</h2>
+    <p class="vitrine-meta">Calculate exact ice-to-hot-water ratios to brew crisp, chilled coffee with zero dilution</p>
+  </div>
+
+  <div class="controls">
+    <div class="field" style="max-width: 300px;">
+      <label for="flash-yield">Target Finished Iced Coffee (mL / grams)</label>
+      <input id="flash-yield" data-flash-yield type="number" min="200" max="1000" step="50" value="500" />
+      <input data-flash-slider type="range" min="200" max="1000" step="50" value="500" />
+    </div>
+
+    <fieldset class="presets">
+      <legend>Quick Batch Sizes</legend>
+      <button type="button" class="button-quiet" data-set-vol="350">Single Glass (350 mL)</button>
+      <button type="button" class="button" data-set-vol="500" aria-pressed="true">Two Glasses (500 mL)</button>
+      <button type="button" class="button-quiet" data-set-vol="750">Carafe Batch (750 mL)</button>
+    </fieldset>
+  </div>
+
+  <!-- The Thermal Recipe Answer Box -->
+  <div class="practical-answer" style="border-color: #2b7489;">
+    <span class="eyebrow" style="color: #2b7489;">✦ BALANCED 60/40 ICE-MELT RECIPE ✦</span>
+    <div class="practical-measure" data-flash-recipe>31.3 g coffee · 300 g hot water · 200 g ice</div>
+
+    <div style="display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 16px;">
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Ice in Carafe (40%)</span>
+        <strong data-ice-g style="font-size: 20px; color: #2b7489;">200 g Ice Cubes</strong>
+      </div>
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Hot Brewing Water (60%)</span>
+        <strong data-hot-g style="font-size: 20px; color: #9a4316;">300 g @ 93°C</strong>
+      </div>
+      <div style="background: var(--canvas-soft); padding: 12px; border-radius: 8px; border: 1px solid var(--hairline);">
+        <span style="font-size: 12px; color: var(--muted); display: block;">Coffee Dose (1:16 Ratio)</span>
+        <strong data-coffee-g style="font-size: 20px; color: var(--ink);">31.3 g Medium Grind</strong>
+      </div>
+    </div>
+
+    <div class="step-flow" style="margin-top: 16px;">
+      <div class="step-item"><span class="step-num">Step 1:</span> <span>Place 200 g of clean ice cubes directly inside your server or carafe.</span></div>
+      <div class="step-item"><span class="step-num">Step 2:</span> <span>Add 31.3 g medium-ground coffee to the filter cone above. Bloom with 60 g hot water for 45s.</span></div>
+      <div class="step-item"><span class="step-num">Step 3:</span> <span>Pour remaining 240 g hot water in slow pulses. Hot coffee quenches instantly on ice, locking aromatics.</span></div>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite">
+    500 mL flash brew requires 31.3 g coffee, 300 g hot water, and 200 g ice in the carafe.
+  </p>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>("[data-flash-brew-tool]");
+  if (root) {
+    const numInput = root.querySelector<HTMLInputElement>("[data-flash-yield]");
+    const slider = root.querySelector<HTMLInputElement>("[data-flash-slider]");
+    const recipeEl = root.querySelector<HTMLElement>("[data-flash-recipe]");
+    const iceEl = root.querySelector<HTMLElement>("[data-ice-g]");
+    const hotEl = root.querySelector<HTMLElement>("[data-hot-g]");
+    const coffeeEl = root.querySelector<HTMLElement>("[data-coffee-g]");
+    const live = root.querySelector<HTMLElement>("[data-live]");
+
+    function update(totalG: number) {
+      const coffeeG = totalG / 16.0;
+      const hotWaterG = Math.round(totalG * 0.6);
+      const iceG = totalG - hotWaterG;
+
+      if (numInput) numInput.value = String(totalG);
+      if (slider) slider.value = String(totalG);
+
+      if (recipeEl) {
+        recipeEl.textContent = `${coffeeG.toFixed(1)} g coffee · ${hotWaterG} g hot water · ${iceG} g ice`;
+      }
+      if (iceEl) iceEl.textContent = `${iceG} g Ice Cubes`;
+      if (hotEl) hotEl.textContent = `${hotWaterG} g @ 93°C`;
+      if (coffeeEl) coffeeEl.textContent = `${coffeeG.toFixed(1)} g Medium Grind`;
+
+      if (live) {
+        live.textContent = `${totalG} mL flash brew requires ${coffeeG.toFixed(1)} g coffee, ${hotWaterG} g hot water, and ${iceG} g ice in the carafe.`;
+      }
+    }
+
+    numInput?.addEventListener("input", (e) => {
+      const val = Number((e.target as HTMLInputElement).value) || 500;
+      update(val);
+    });
+
+    slider?.addEventListener("input", (e) => {
+      const val = Number((e.target as HTMLInputElement).value) || 500;
+      update(val);
+    });
+
+    root.querySelectorAll<HTMLButtonElement>("[data-set-vol]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        root.querySelectorAll("[data-set-vol]").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.classList.add("button-quiet");
+          b.classList.remove("button");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.add("button");
+        btn.classList.remove("button-quiet");
+
+        const val = Number(btn.getAttribute("data-set-vol")) || 500;
+        update(val);
+      });
+    });
+
+    update(500);
+  }
+</script>

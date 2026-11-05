@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import FlashBrewTool from "../../components/FlashBrewTool.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const path = "/calculators/iced-coffee-calculator/";
+const title = "Iced coffee ratio calculator";
+const description =
+  "Flash brew iced coffee calculator: calculate exact ice-to-hot-water ratios to brew chilled coffee with zero dilution.";
+
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Iced coffee ratio calculator" },
+];
+
+const faqs = [
+  {
+    q: "What is Japanese flash brew iced coffee?",
+    a: "Flash brewing (or ice drip pour-over) involves brewing hot coffee directly onto ice cubes in the server. The intense thermal shock quenches the brew instantly, trapping volatile aromatics that normally oxidize and evaporate, resulting in a vibrant, clean iced coffee.",
+  },
+  {
+    q: "Why is flash brew better than pouring hot coffee over ice?",
+    a: "Pouring finished hot coffee over ice melts the ice unpredictably, watering down the cup. Flash brewing accounts for the melted ice as 40% of the total brewing water, guaranteeing exact SCA brew ratios.",
+  },
+  {
+    q: "How does flash brew differ from cold brew?",
+    a: "Cold brew steeps grounds in cold water for 16 to 24 hours, yielding a chocolatey, low-acid, heavy-bodied concentrate. Flash brew extracts quickly with hot water before chilling, preserving bright floral acidity, fruit notes, and complex aromatics.",
+  },
+];
+
+const faqLd = {
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+
+const jsonLd = graph(
+  personNode(),
+  appNode(title, path, description),
+  faqLd,
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: title, path },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{title}</h1>
+  <p class="lede">{description}</p>
+
+  <FlashBrewTool />
+
+  <section class="faq" style="margin-top: 40px;">
+    <h2>Frequently Asked Questions on Iced Coffee &amp; Flash Brew</h2>
+    {
+      faqs.map((item) => (
+        <>
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </>
+      ))
+    }
+  </section>
+</BaseLayout>

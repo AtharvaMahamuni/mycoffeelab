@@ -1,0 +1,271 @@
+---
+import { url } from "../lib/site";
+---
+
+<div class="specimen-folio studio-folio" data-coffee-studio>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Interactive 3D Dimensional Studio ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">3D Coffee Explorer &amp; Layer Teardown</h2>
+    <p class="vitrine-meta">Orbit 360° in 3D space and explode physical liquid strata along the vertical axis</p>
+  </div>
+
+  <div class="controls" style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <button type="button" class="button" data-vessel="cortado" aria-pressed="true">Cortado (Gibraltar)</button>
+      <button type="button" class="button-quiet" data-vessel="flatwhite">Flat White (Ceramic 6)</button>
+      <button type="button" class="button-quiet" data-vessel="latte">Caffè Latte (Tumbler)</button>
+      <button type="button" class="button-quiet" data-vessel="espresso">Espresso (Demitasse)</button>
+    </div>
+
+    <div>
+      <button type="button" class="button" data-toggle-explode style="background: #a46830;">
+        💥 Explode Layers
+      </button>
+    </div>
+  </div>
+
+  <!-- 3D Canvas Stage -->
+  <div style="position: relative; width: 100%; height: 380px; background: radial-gradient(circle at 50% 40%, rgba(250, 247, 242, 0.8) 0%, rgba(237, 230, 220, 0.95) 100%); border: 1px solid var(--hairline); border-radius: 8px; overflow: hidden; margin: 16px 0; touch-action: none;">
+    <canvas data-studio-canvas width="800" height="450" style="width: 100%; height: 100%; display: block; cursor: grab;"></canvas>
+
+    <!-- Interactive Hint Overlay -->
+    <div style="position: absolute; bottom: 12px; left: 16px; font-family: var(--font-mono); font-size: 11px; color: var(--muted); pointer-events: none;">
+      Drag to rotate 360° · Scroll to zoom
+    </div>
+
+    <!-- Exploded Callout Annotations -->
+    <div data-hud-foam style="position: absolute; top: 22%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+      <strong style="color: #c86d32; display: block;">[ MICROFOAM CAP ]</strong>
+      <span>1.2 cm · Density: 0.35 g/cm³</span>
+    </div>
+
+    <div data-hud-milk style="position: absolute; top: 48%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+      <strong style="color: #6b5c54; display: block;">[ TEXTURED WHOLE MILK ]</strong>
+      <span>130 mL · 65°C</span>
+    </div>
+
+    <div data-hud-espresso style="position: absolute; bottom: 20%; right: 18%; background: rgba(255, 255, 255, 0.95); border: 1px solid var(--hairline); padding: 6px 12px; border-radius: 6px; font-family: var(--font-mono); font-size: 11px; display: none; box-shadow: 0 4px 12px rgba(23, 18, 16, 0.08); pointer-events: none;">
+      <strong style="color: #171210; display: block;">[ DOUBLE ESPRESSO ]</strong>
+      <span>36.0 g · 9.2% TDS · 1:2.0</span>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite">
+    3D Coffee Studio: Gibraltar glass with 36 g espresso, 60 mL steamed milk, and microfoam cap.
+  </p>
+</div>
+
+<script>
+  (() => {
+    const root = document.querySelector<HTMLElement>("[data-coffee-studio]");
+    if (!root) return;
+    const canvas = root.querySelector<HTMLCanvasElement>("[data-studio-canvas]");
+    const hudFoam = root.querySelector<HTMLElement>("[data-hud-foam]");
+    const hudMilk = root.querySelector<HTMLElement>("[data-hud-milk]");
+    const hudEspresso = root.querySelector<HTMLElement>("[data-hud-espresso]");
+    const explodeBtn = root.querySelector<HTMLButtonElement>("[data-toggle-explode]");
+    const live = root.querySelector<HTMLElement>("[data-live]");
+
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let rotX = 0.25; // tilt
+    let rotY = 0.4;  // azimuth
+    let zoom = 1.0;
+    let isDragging = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let isExploded = false;
+    let explodeAnim = 0.0; // 0.0 to 1.0
+    let currentDrink = "cortado";
+
+    // Drink layer configurations
+    const DRINK_CONFIGS: Record<string, { topR: number; botR: number; height: number; espressoH: number; milkH: number; foamH: number }> = {
+      cortado: { topR: 68, botR: 50, height: 120, espressoH: 35, milkH: 70, foamH: 15 },
+      flatwhite: { topR: 80, botR: 52, height: 130, espressoH: 35, milkH: 80, foamH: 15 },
+      latte: { topR: 74, botR: 48, height: 180, espressoH: 35, milkH: 125, foamH: 20 },
+      espresso: { topR: 54, botR: 38, height: 60, espressoH: 45, milkH: 0, foamH: 15 },
+    };
+
+    function render() {
+      if (!ctx || !canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const cfg = DRINK_CONFIGS[currentDrink] || DRINK_CONFIGS.cortado;
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2 + 30;
+
+      // Smooth explode animation interpolation
+      const targetAnim = isExploded ? 1.0 : 0.0;
+      explodeAnim += (targetAnim - explodeAnim) * 0.12;
+
+      const explodeOffsetFoam = explodeAnim * 65;
+      const explodeOffsetMilk = explodeAnim * 30;
+
+      // Draw Glassware Shadow
+      ctx.save();
+      ctx.translate(cx, cy + cfg.height / 2 + 10);
+      ctx.scale(1, 0.35);
+      ctx.beginPath();
+      ctx.arc(0, 0, cfg.botR * 1.3, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(23, 18, 16, 0.12)";
+      ctx.filter = "blur(8px)";
+      ctx.fill();
+      ctx.restore();
+
+      // Helper function to project 3D cylinder slice
+      function drawCylinderSlice(
+        yBottom: number,
+        yTop: number,
+        rBottom: number,
+        rTop: number,
+        fillColor: string,
+        strokeColor: string,
+      ) {
+        if (!ctx) return;
+        const cosY = Math.cos(rotY);
+        const sinY = Math.sin(rotY);
+        const cosX = Math.cos(rotX);
+        const sinX = Math.sin(rotX);
+
+        const yb = cy - yBottom;
+        const yt = cy - yTop;
+
+        // Front half-cylinder path
+        ctx.save();
+        ctx.beginPath();
+
+        // Bottom ellipse (tilted by rotX)
+        const bRy = rBottom * Math.sin(rotX);
+        const tRy = rTop * Math.sin(rotX);
+
+        ctx.ellipse(cx, yb, rBottom, Math.abs(bRy), 0, 0, Math.PI);
+        ctx.lineTo(cx - rTop, yt);
+        ctx.ellipse(cx, yt, rTop, Math.abs(tRy), 0, Math.PI, 0, true);
+        ctx.closePath();
+
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // Top cap ellipse
+        ctx.beginPath();
+        ctx.ellipse(cx, yt, rTop, Math.abs(tRy), 0, 0, Math.PI * 2);
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Calculate geometry heights
+      const hEspresso = cfg.espressoH;
+      const hMilk = cfg.milkH;
+      const hFoam = cfg.foamH;
+
+      const r0 = cfg.botR;
+      const r1 = r0 + (cfg.topR - r0) * (hEspresso / cfg.height);
+      const r2 = r0 + (cfg.topR - r0) * ((hEspresso + hMilk) / cfg.height);
+      const r3 = cfg.topR;
+
+      // 1. Layer: Espresso Base (anchored at y = -cfg.height/2)
+      const base0 = -cfg.height / 2;
+      drawCylinderSlice(base0, base0 + hEspresso, r0, r1, "#28160c", "#171210");
+
+      // 2. Layer: Steamed Milk (floating when exploded)
+      if (hMilk > 0) {
+        const milk0 = base0 + hEspresso + explodeOffsetMilk;
+        drawCylinderSlice(milk0, milk0 + hMilk, r1, r2, "#f4efe6", "#d9cec1");
+      }
+
+      // 3. Layer: Crema / Microfoam Cap (floating high when exploded)
+      const foam0 = base0 + hEspresso + hMilk + explodeOffsetFoam;
+      const foamColor = cfg.milkH > 0 ? "#fdfbf7" : "#c86d32";
+      const foamStroke = cfg.milkH > 0 ? "#e2d8cb" : "#9a4316";
+      drawCylinderSlice(foam0, foam0 + hFoam, r2, r3, foamColor, foamStroke);
+
+      // 4. Glassware Outer Shell (Translucent borosilicate with specular highlight)
+      if (explodeAnim < 0.8) {
+        ctx.save();
+        ctx.globalAlpha = 0.35 * (1.0 - explodeAnim);
+        ctx.beginPath();
+        const gBotRy = (r0 + 6) * Math.sin(rotX);
+        const gTopRy = (r3 + 6) * Math.sin(rotX);
+        ctx.ellipse(cx, cy - base0, r0 + 6, Math.abs(gBotRy), 0, 0, Math.PI);
+        ctx.lineTo(cx - (r3 + 6), cy - (base0 + cfg.height));
+        ctx.ellipse(cx, cy - (base0 + cfg.height), r3 + 6, Math.abs(gTopRy), 0, Math.PI, 0, true);
+        ctx.closePath();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.12)";
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // HUD Annotations display when exploded
+      const showHud = explodeAnim > 0.4;
+      if (hudFoam) hudFoam.style.display = showHud ? "block" : "none";
+      if (hudMilk) hudMilk.style.display = showHud && cfg.milkH > 0 ? "block" : "none";
+      if (hudEspresso) hudEspresso.style.display = showHud ? "block" : "none";
+
+      requestAnimationFrame(render);
+    }
+
+    render();
+
+    // Mouse & Touch Drag Controls
+    canvas.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      canvas.setPointerCapture(e.pointerId);
+      canvas.style.cursor = "grabbing";
+    });
+
+    window.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - lastMouseX;
+      const dy = e.clientY - lastMouseY;
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+
+      rotY += dx * 0.01;
+      rotX = Math.min(0.6, Math.max(0.1, rotX + dy * 0.005));
+    });
+
+    window.addEventListener("pointerup", () => {
+      isDragging = false;
+      canvas.style.cursor = "grab";
+    });
+
+    // Explode Button Toggle
+    explodeBtn?.addEventListener("click", () => {
+      isExploded = !isExploded;
+      explodeBtn.textContent = isExploded ? "📦 Restore Drink" : "💥 Explode Layers";
+      if (live) {
+        live.textContent = isExploded
+          ? "Exploded view: Microfoam cap, steamed milk, and double espresso separated along the vertical axis."
+          : "Standard 3D view: Finished drink in calibrated glassware.";
+      }
+    });
+
+    // Vessel Switcher
+    root.querySelectorAll<HTMLButtonElement>("[data-vessel]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        root.querySelectorAll("[data-vessel]").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.classList.add("button-quiet");
+          b.classList.remove("button");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.add("button");
+        btn.classList.remove("button-quiet");
+
+        currentDrink = btn.getAttribute("data-vessel") || "cortado";
+      });
+    });
+  })();
+</script>

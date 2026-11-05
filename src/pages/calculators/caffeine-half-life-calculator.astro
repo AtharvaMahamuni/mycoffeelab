@@ -1,0 +1,97 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import CaffeineCalculator from "../../components/CaffeineCalculator.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const path = "/calculators/caffeine-half-life-calculator/";
+const title = "Caffeine half-life calculator";
+const description =
+  "Calculate active bloodstream caffeine and predict sleep disruption based on pharmacokinetic half-life decay.";
+
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Caffeine half-life calculator" },
+];
+
+const faqs = [
+  {
+    q: "What is the half-life of caffeine?",
+    a: "The biological half-life of caffeine is the time required for your body to eliminate 50% of the active compound from your bloodstream. For a healthy adult, the average half-life is 5.0 hours, with a typical range between 3.0 and 7.0 hours depending on liver enzyme genetics.",
+  },
+  {
+    q: "How long does caffeine take to completely leave your system?",
+    a: "Complete clearance down to negligible levels (under 5 mg) requires 4 to 5 half-lives, which equals 20 to 25 hours for the average adult. While cognitive alertness peaks and fades within 3 to 4 hours, trace amounts circulate in the blood through the night.",
+  },
+  {
+    q: "Why can some people fall asleep after drinking coffee but wake up tired?",
+    a: "Falling asleep and achieving restorative sleep are biologically distinct. Caffeine blocks adenosine receptors, preventing your brain from sensing sleep pressure. Even if you fall asleep, residual caffeine suppresses Stage N3 slow-wave deep sleep by up to 20% and fragments REM sleep.",
+  },
+  {
+    q: "What is the safe threshold of caffeine at bedtime?",
+    a: "Clinical sleep research shows that having under 50 mg of residual caffeine at bedtime causes negligible sleep latency and preserves normal REM architecture. Having 100 mg or more delays sleep onset by an average of 40 minutes.",
+  },
+  {
+    q: "When should I stop drinking coffee before bed?",
+    a: "With an average 5-hour half-life and a standard 140 mg coffee dose, your cutoff is 8 to 10 hours before your head hits the pillow (e.g. between 12:00 PM and 2:00 PM for a 10:30 PM bedtime).",
+  },
+  {
+    q: "How do oral contraceptives affect caffeine half-life?",
+    a: "Estrogen-containing birth control pills compete for the CYP1A2 liver enzyme, prolonging caffeine half-life from 5.0 hours to between 7.5 and 10.0 hours. Coffee lasts nearly twice as long in the system for women taking oral contraceptives.",
+  },
+  {
+    q: "How much caffeine is in a double espresso vs drip coffee vs cold brew?",
+    a: "A standard double espresso (40 mL) contains about 140 mg of caffeine. A 12 oz drip coffee mug contains about 165 mg. A 16 oz cold brew contains about 210 mg. Decaf coffee contains 2 to 6 mg per cup.",
+  },
+  {
+    q: "What causes the 3 PM coffee crash?",
+    a: "The afternoon crash is caused by an adenosine backlog. Morning coffee blocks adenosine receptors without stopping adenosine production. When caffeine metabolizes 5 to 6 hours later, the accumulated queue of adenosine floods vacant receptors simultaneously, triggering sudden fatigue.",
+  },
+  {
+    q: "Can drinking water or exercising speed up caffeine clearance?",
+    a: "No. Liver enzymatic oxidation by the CYP1A2 protein cannot be sped up by hydration or exercise. Water helps relieve dehydration, but the biochemical clearance clock remains fixed.",
+  },
+];
+
+const faqLd = {
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+
+const jsonLd = graph(
+  personNode(),
+  appNode(title, path, description),
+  faqLd,
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: title, path },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{title}</h1>
+  <p class="lede">{description}</p>
+
+  <CaffeineCalculator />
+
+  <section class="faq" style="margin-top: 40px;">
+    <h2>Frequently Asked Questions on Caffeine Clearance &amp; Sleep</h2>
+    {
+      faqs.map((item) => (
+        <>
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </>
+      ))
+    }
+  </section>
+</BaseLayout>

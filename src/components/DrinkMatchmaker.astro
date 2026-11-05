@@ -1,0 +1,272 @@
+---
+import { url } from "../lib/site";
+---
+
+<div class="specimen-folio matchmaker-folio" data-matchmaker>
+  <div class="folio-header">
+    <span class="eyebrow">✦ The Barista Concierge ✦</span>
+    <h3 class="folio-title">Drink Matchmaker: Find Your Signature Coffee</h3>
+    <p class="vitrine-meta">Answer 3 simple questions to discover your ideal coffee specimen</p>
+  </div>
+
+  <div class="matchmaker-questions">
+    <!-- Question 1 -->
+    <div class="quiz-step" data-step="1">
+      <span class="step-num">Step 1 of 3</span>
+      <h4>How do you prefer your coffee?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-btn" data-q="milk" data-val="black">
+          <strong>Black & Pure</strong>
+          <span>Clean, unadulterated coffee extraction</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="milk" data-val="milk">
+          <strong>With Steamed Milk</strong>
+          <span>Creamy, comforting, velvety texture</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="milk" data-val="cold">
+          <strong>Chilled / Iced</strong>
+          <span>Crisp, refreshing, over ice</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="quiz-step" data-step="2" style="display: none;">
+      <span class="step-num">Step 2 of 3</span>
+      <h4>How bold do you want the espresso punch?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-btn" data-q="strength" data-val="bold">
+          <strong>Bold & Intense</strong>
+          <span>Strong coffee kick that wakes you up</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="strength" data-val="balanced">
+          <strong>Smooth & Balanced</strong>
+          <span>Harmonious coffee & milk equilibrium</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="strength" data-val="mild">
+          <strong>Gentle & Subtle</strong>
+          <span>Warm, creamy comfort; mild coffee presence</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="quiz-step" data-step="3" style="display: none;">
+      <span class="step-num">Step 3 of 3</span>
+      <h4>What foam texture do you enjoy?</h4>
+      <div class="quiz-options">
+        <button type="button" class="quiz-btn" data-q="foam" data-val="dense">
+          <strong>Pillowy & Airy Foam</strong>
+          <span>Thick foam head you can scoop with a spoon</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="foam" data-val="silky">
+          <strong>Silky Microfoam</strong>
+          <span>Glossy 'wet paint' texture that blends into milk</span>
+        </button>
+        <button type="button" class="quiz-btn" data-q="foam" data-val="none">
+          <strong>Minimal / Zero Foam</strong>
+          <span>Pure liquid with no froth layer</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="quiz-result" data-result style="display: none;">
+      <div class="result-badge">✦ YOUR SIGNATURE MATCH ✦</div>
+      <h4 class="result-title" data-drink-name>Cortado</h4>
+      <p class="result-desc" data-drink-desc>An intense 1:1 balance of rich espresso and equal steamed milk in a small Gibraltar glass.</p>
+      <div class="result-actions">
+        <a href={url("/drinks/cortado/")} class="button" data-drink-link>Explore Recipe & Ordering Guide</a>
+        <button type="button" class="button-quiet" data-quiz-restart>Take Quiz Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { url } from "../lib/site";
+
+  const root = document.querySelector<HTMLElement>("[data-matchmaker]");
+  if (root) {
+    let answers: Record<string, string> = { milk: "milk", strength: "balanced", foam: "silky" };
+    const step1 = root.querySelector<HTMLElement>('[data-step="1"]');
+    const step2 = root.querySelector<HTMLElement>('[data-step="2"]');
+    const step3 = root.querySelector<HTMLElement>('[data-step="3"]');
+    const resultBox = root.querySelector<HTMLElement>("[data-result]");
+    const drinkName = root.querySelector<HTMLElement>("[data-drink-name]");
+    const drinkDesc = root.querySelector<HTMLElement>("[data-drink-desc]");
+    const drinkLink = root.querySelector<HTMLAnchorElement>("[data-drink-link]");
+    const restartBtn = root.querySelector<HTMLButtonElement>("[data-quiz-restart]");
+
+    const DRINKS: Record<string, { name: string; slug: string; desc: string }> = {
+      cortado: {
+        name: "Cortado",
+        slug: "cortado",
+        desc: "An intense 1:1 balance of double espresso and warm steamed milk, served in a 4.5 oz Gibraltar glass.",
+      },
+      flatwhite: {
+        name: "Flat White",
+        slug: "flat-white",
+        desc: "Rich espresso folded into velvety microfoam in a 6 oz ceramic cup for a creamy yet coffee-forward taste.",
+      },
+      cappuccino: {
+        name: "Cappuccino",
+        slug: "cappuccino",
+        desc: "Equal parts espresso, steamed milk, and a thick, luxurious 1.5 cm pillow of microfoam.",
+      },
+      latte: {
+        name: "Caffè Latte",
+        slug: "latte",
+        desc: "A mild, gentle morning coffee with generous warm milk (10 oz) topped with a light microfoam layer.",
+      },
+      espresso: {
+        name: "Espresso",
+        slug: "espresso",
+        desc: "Pure, concentrated coffee extraction with dense golden crema, rich aromatics, and syrupy body.",
+      },
+      americano: {
+        name: "Americano",
+        slug: "americano",
+        desc: "Double espresso diluted with hot water to the strength of a drip coffee while preserving rich crema notes.",
+      },
+      coldbrew: {
+        name: "Cold Brew",
+        slug: "cold-brew",
+        desc: "Steeped in cold water for 16 hours for an ultra-smooth, low-acidity, refreshing iced coffee experience.",
+      },
+      macchiato: {
+        name: "Espresso Macchiato",
+        slug: "macchiato",
+        desc: "A bold double shot 'stained' with just a single dollop of warm milk foam on top.",
+      },
+    };
+
+    function calculateMatch(): { name: string; slug: string; desc: string } {
+      if (answers.milk === "cold") return DRINKS.coldbrew;
+      if (answers.milk === "black") {
+        if (answers.strength === "bold") return DRINKS.espresso;
+        return DRINKS.americano;
+      }
+      // With milk
+      if (answers.strength === "bold") {
+        if (answers.foam === "dense") return DRINKS.macchiato;
+        return DRINKS.cortado;
+      }
+      if (answers.strength === "balanced") {
+        if (answers.foam === "dense") return DRINKS.cappuccino;
+        return DRINKS.flatwhite;
+      }
+      return DRINKS.latte;
+    }
+
+    root.addEventListener("click", (e) => {
+      const target = (e.target as HTMLElement).closest<HTMLButtonElement>(".quiz-btn");
+      if (!target) return;
+      const q = target.getAttribute("data-q");
+      const val = target.getAttribute("data-val");
+      if (!q || !val) return;
+
+      answers[q] = val;
+
+      if (q === "milk") {
+        if (step1 && step2) {
+          step1.style.display = "none";
+          step2.style.display = "block";
+        }
+      } else if (q === "strength") {
+        if (step2 && step3) {
+          step2.style.display = "none";
+          step3.style.display = "block";
+        }
+      } else if (q === "foam") {
+        if (step3 && resultBox) {
+          step3.style.display = "none";
+          resultBox.style.display = "block";
+          const match = calculateMatch();
+          if (drinkName) drinkName.textContent = match.name;
+          if (drinkDesc) drinkDesc.textContent = match.desc;
+          if (drinkLink) drinkLink.href = url(`/drinks/${match.slug}/`);
+        }
+      }
+    });
+
+    restartBtn?.addEventListener("click", () => {
+      if (resultBox && step1 && step2 && step3) {
+        resultBox.style.display = "none";
+        step2.style.display = "none";
+        step3.style.display = "none";
+        step1.style.display = "block";
+      }
+    });
+  }
+</script>
+
+<style>
+  .quiz-options {
+    display: grid;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  @media (min-width: 600px) {
+    .quiz-options {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .quiz-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 16px;
+    background: var(--canvas-soft);
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--ink);
+    min-height: 80px;
+  }
+  .quiz-btn:hover {
+    border-color: var(--primary);
+    background: var(--surface);
+  }
+  .quiz-btn strong {
+    font-size: 16px;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  .quiz-btn span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .quiz-result {
+    text-align: center;
+    padding: 24px 16px;
+    background: linear-gradient(180deg, var(--canvas-soft) 0%, var(--surface) 100%);
+    border: 1.5px solid var(--primary);
+    border-radius: 12px;
+  }
+  .result-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.12em;
+  }
+  .result-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    margin: 8px 0;
+    color: var(--ink);
+  }
+  .result-desc {
+    max-width: 50ch;
+    margin: 0 auto 20px;
+    color: var(--ink-secondary);
+  }
+  .result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+</style>

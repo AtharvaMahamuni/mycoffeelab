@@ -1,0 +1,260 @@
+---
+import {
+  CAFFEINE_PRESETS,
+  METABOLISM_PROFILES,
+  generateCaffeineSvgPath,
+  totalCaffeineAtTime,
+  evaluateSleepQuality,
+} from "../lib/caffeine";
+
+const initialIntakes = [{ doseMg: 140, intakeHour: 8.0 }]; // 8:00 AM double espresso
+const initialHalfLife = 5.0;
+const initialBedtime = 22.5; // 10:30 PM
+const initialResidual = totalCaffeineAtTime(initialIntakes, initialBedtime, initialHalfLife);
+const initialVerdict = evaluateSleepQuality(initialResidual);
+
+const svgW = 600;
+const svgH = 200;
+const initialPath = generateCaffeineSvgPath(initialIntakes, initialHalfLife, svgW, svgH);
+---
+
+<div class="specimen-folio" data-caffeine-calculator>
+  <div class="folio-header">
+    <span class="eyebrow">✦ Precision Pharmacokinetic Engine ✦</span>
+    <h2 class="folio-title" style="font-size: 26px;">Caffeine Clearance &amp; Bedtime Sleep Calculator</h2>
+    <p class="vitrine-meta">Track active bloodstream caffeine and predict sleep disruption</p>
+  </div>
+
+  <div class="controls">
+    <!-- Step 1: Drink Presets -->
+    <fieldset class="presets">
+      <legend>1. Select Your Coffee Drink or Enter Dose</legend>
+      {
+        CAFFEINE_PRESETS.map((preset) => (
+          <button
+            type="button"
+            class={preset.id === "double-espresso" ? "button" : "button-quiet"}
+            data-preset-id={preset.id}
+            data-dose={preset.doseMg}
+            aria-pressed={preset.id === "double-espresso" ? "true" : "false"}
+          >
+            {preset.name} ({preset.doseMg} mg)
+          </button>
+        ))
+      }
+    </fieldset>
+
+    <div class="field" style="max-width: 240px;">
+      <label for="caffeine-custom-dose">Custom Caffeine Dose (mg)</label>
+      <input id="caffeine-custom-dose" data-custom-dose type="number" min="10" max="600" step="5" value="140" />
+    </div>
+
+    <!-- Step 2: Time Consumed & Bedtime -->
+    <div style="display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+      <div class="field">
+        <label for="caffeine-intake-time">Time Consumed: <strong data-display-intake>8:00 AM</strong></label>
+        <input id="caffeine-intake-time" data-intake-range type="range" min="6" max="20" step="0.5" value="8" />
+      </div>
+
+      <div class="field">
+        <label for="caffeine-bedtime">Planned Bedtime: <strong data-display-bedtime>10:30 PM</strong></label>
+        <input id="caffeine-bedtime" data-bedtime-range type="range" min="20" max="28" step="0.5" value="22.5" />
+      </div>
+    </div>
+
+    <!-- Step 3: Metabolism Profile -->
+    <fieldset class="choices">
+      <legend>3. Metabolic Speed Profile (CYP1A2 Half-Life)</legend>
+      {
+        METABOLISM_PROFILES.map((profile) => (
+          <label class="choice">
+            <input
+              type="radio"
+              name="metabolism"
+              value={profile.halfLifeHours}
+              checked={profile.id === "average"}
+            />
+            <span>
+              <strong>{profile.label}</strong>
+            </span>
+          </label>
+        ))
+      }
+    </fieldset>
+  </div>
+
+  <!-- Instant Output Ledger -->
+  <div class="practical-answer" data-verdict-card style="border-color: #c86d32;">
+    <span class="eyebrow" data-verdict-badge>{initialVerdict.title}</span>
+    <div class="practical-measure">
+      <span data-residual-mg>{initialResidual.toFixed(1)}</span> mg active at bedtime
+    </div>
+    <p data-verdict-desc style="margin: 0 0 12px; color: var(--ink-secondary); font-size: 15px;">
+      {initialVerdict.description}
+    </p>
+
+    <div style="display: grid; gap: 8px; font-size: 14px; padding-top: 10px; border-top: 1px solid var(--hairline-soft);">
+      <div>• <strong>50 mg Sleep Safety Line:</strong> Having under 50 mg at bedtime minimizes sleep onset delay.</div>
+      <div>• <strong>Full Clearance (&lt;5 mg):</strong> Around <strong data-clearance-time>11:30 PM</strong> (15.5 hours after intake).</div>
+      <div>• <strong>Recommended Cutoff Tomorrow:</strong> Stop caffeine by <strong data-cutoff-time>1:30 PM</strong>.</div>
+    </div>
+  </div>
+
+  <p class="live" data-live aria-live="polite">
+    With a 140 mg double espresso at 8:00 AM and a 5.0 hour half-life, you have about 18 mg of caffeine remaining at 10:30 PM.
+  </p>
+
+  <!-- 24-Hour Clearance Wave Motion Visualizer -->
+  <div class="stage" style="display: block; margin: 20px 0;">
+    <div style="display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-bottom: 6px;">
+      <span>6:00 AM</span>
+      <span>12:00 PM</span>
+      <span>6:00 PM</span>
+      <span>12:00 AM</span>
+      <span>6:00 AM</span>
+    </div>
+
+    <div style="position: relative; width: 100%; height: 200px; background: var(--canvas-soft); border: 1px solid var(--hairline); border-radius: 8px; overflow: hidden;">
+      <!-- Safe 50mg Sleep Threshold Line -->
+      <div style="position: absolute; left: 0; right: 0; bottom: 46px; border-top: 1px dashed #c86d32; pointer-events: none; z-index: 2;">
+        <span style="position: absolute; right: 8px; top: -16px; font-family: var(--font-mono); font-size: 10px; color: #c86d32;">
+          Safe 50 mg Threshold
+        </span>
+      </div>
+
+      <!-- Bedtime Caliper Indicator -->
+      <div
+        data-bedtime-marker
+        style="position: absolute; top: 0; bottom: 0; width: 2px; background: var(--primary); z-index: 3; pointer-events: none; left: 68.75%;"
+      >
+        <span style="position: absolute; top: 6px; transform: translateX(-50%); background: var(--primary); color: #fff; font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">
+          Bedtime
+        </span>
+      </div>
+
+      <!-- Dynamic SVG Curve -->
+      <svg
+        viewBox={`0 0 ${svgW} ${svgH}`}
+        preserveAspectRatio="none"
+        style="width: 100%; height: 100%; display: block;"
+        role="img"
+        aria-label="24-hour caffeine clearance curve"
+      >
+        <defs>
+          <linearGradient id="caffeine-wave-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#c86d32" stop-opacity="0.6"></stop>
+            <stop offset="100%" stop-color="#c86d32" stop-opacity="0.05"></stop>
+          </linearGradient>
+        </defs>
+        <path data-wave-path d={initialPath} fill="url(#caffeine-wave-grad)" stroke="#9a4316" stroke-width="2.5"></path>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    totalCaffeineAtTime,
+    evaluateSleepQuality,
+    formatClockTime,
+    generateCaffeineSvgPath,
+  } from "../lib/caffeine";
+
+  const root = document.querySelector<HTMLElement>("[data-caffeine-calculator]");
+  if (root) {
+    let currentDose = 140;
+    let currentIntake = 8.0;
+    let currentBedtime = 22.5;
+    let currentHalfLife = 5.0;
+
+    const doseInput = root.querySelector<HTMLInputElement>("[data-custom-dose]");
+    const intakeSlider = root.querySelector<HTMLInputElement>("[data-intake-range]");
+    const bedtimeSlider = root.querySelector<HTMLInputElement>("[data-bedtime-range]");
+    const displayIntake = root.querySelector<HTMLElement>("[data-display-intake]");
+    const displayBedtime = root.querySelector<HTMLElement>("[data-display-bedtime]");
+    const residualMgEl = root.querySelector<HTMLElement>("[data-residual-mg]");
+    const verdictBadge = root.querySelector<HTMLElement>("[data-verdict-badge]");
+    const verdictDesc = root.querySelector<HTMLElement>("[data-verdict-desc]");
+    const clearanceEl = root.querySelector<HTMLElement>("[data-clearance-time]");
+    const cutoffEl = root.querySelector<HTMLElement>("[data-cutoff-time]");
+    const bedtimeMarker = root.querySelector<HTMLElement>("[data-bedtime-marker]");
+    const wavePath = root.querySelector<SVGPathElement>("[data-wave-path]");
+    const live = root.querySelector<HTMLElement>("[data-live]");
+
+    function update() {
+      const intakes = [{ doseMg: currentDose, intakeHour: currentIntake }];
+      const residual = totalCaffeineAtTime(intakes, currentBedtime, currentHalfLife);
+      const verdict = evaluateSleepQuality(residual);
+
+      if (displayIntake) displayIntake.textContent = formatClockTime(currentIntake);
+      if (displayBedtime) displayBedtime.textContent = formatClockTime(currentBedtime);
+      if (residualMgEl) residualMgEl.textContent = residual.toFixed(1);
+      if (verdictBadge) verdictBadge.textContent = verdict.title;
+      if (verdictDesc) verdictDesc.textContent = verdict.description;
+
+      // Clearance time: when dose decays to <5mg
+      const hoursTo5mg = currentHalfLife * Math.log2(Math.max(1, currentDose / 5)) + 0.75;
+      const clearanceHour = currentIntake + hoursTo5mg;
+      if (clearanceEl) clearanceEl.textContent = formatClockTime(clearanceHour);
+
+      // Safe cutoff time tomorrow: Bedtime minus hours needed to decay to 40mg
+      const hoursToSafe = currentHalfLife * Math.log2(Math.max(1, currentDose / 40)) + 0.75;
+      const cutoffHour = Math.max(6, currentBedtime - hoursToSafe);
+      if (cutoffEl) cutoffEl.textContent = formatClockTime(cutoffHour);
+
+      // Update bedtime marker position (6 AM is 0%, 6 AM next day is 100%)
+      const bedtimePct = Math.min(100, Math.max(0, ((currentBedtime - 6.0) / 24.0) * 100));
+      if (bedtimeMarker) bedtimeMarker.style.left = `${bedtimePct.toFixed(2)}%`;
+
+      // Update SVG wave path
+      const newD = generateCaffeineSvgPath(intakes, currentHalfLife, 600, 200, Math.max(250, currentDose * 1.1));
+      if (wavePath) wavePath.setAttribute("d", newD);
+
+      if (live) {
+        live.textContent = `With ${currentDose} mg consumed at ${formatClockTime(currentIntake)} and a ${currentHalfLife.toFixed(1)} hour half-life, you will have ${residual.toFixed(1)} mg active caffeine at ${formatClockTime(currentBedtime)}.`;
+      }
+    }
+
+    // Preset buttons
+    root.querySelectorAll<HTMLButtonElement>("[data-preset-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        root.querySelectorAll("[data-preset-id]").forEach((b) => {
+          b.setAttribute("aria-pressed", "false");
+          b.classList.add("button-quiet");
+          b.classList.remove("button");
+        });
+        btn.setAttribute("aria-pressed", "true");
+        btn.classList.add("button");
+        btn.classList.remove("button-quiet");
+
+        currentDose = Number(btn.getAttribute("data-dose")) || 140;
+        if (doseInput) doseInput.value = String(currentDose);
+        update();
+      });
+    });
+
+    doseInput?.addEventListener("input", (e) => {
+      currentDose = Number((e.target as HTMLInputElement).value) || 140;
+      update();
+    });
+
+    intakeSlider?.addEventListener("input", (e) => {
+      currentIntake = Number((e.target as HTMLInputElement).value) || 8.0;
+      update();
+    });
+
+    bedtimeSlider?.addEventListener("input", (e) => {
+      currentBedtime = Number((e.target as HTMLInputElement).value) || 22.5;
+      update();
+    });
+
+    root.querySelectorAll<HTMLInputElement>('input[name="metabolism"]').forEach((radio) => {
+      radio.addEventListener("change", (e) => {
+        currentHalfLife = Number((e.target as HTMLInputElement).value) || 5.0;
+        update();
+      });
+    });
+
+    update();
+  }
+</script>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import DialInCompass from "../../components/DialInCompass.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const path = "/calculators/espresso-dial-in-calculator/";
+const title = "Espresso dial-in calculator";
+const description =
+  "Diagnose under-extracted sour shots or over-extracted bitter shots and find the exact grind and dose correction.";
+
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Espresso dial-in calculator" },
+];
+
+const faqs = [
+  {
+    q: "Why does my espresso taste sour?",
+    a: "Sourness is the hallmark of under-extraction. Organic fruit acids dissolve first in hot water, while sweet sugars and balancing caramels require more contact time. If your shot runs in under 22 seconds, water is passing through too quickly—grind finer.",
+  },
+  {
+    q: "Why does my espresso taste bitter and dry?",
+    a: "Bitterness and astringency occur when coffee is over-extracted or water channels through cracks in the puck. Tannins, phenols, and pyrazines leach out late in the extraction—grind slightly coarser.",
+  },
+  {
+    q: "What is the standard 1:2 espresso brew ratio?",
+    a: "A traditional Normale espresso uses an exact 1:2 ratio: 18 grams of dry ground coffee yields 36 grams of liquid espresso in 25 to 30 seconds at 9 bars of pressure.",
+  },
+];
+
+const faqLd = {
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+
+const jsonLd = graph(
+  personNode(),
+  appNode(title, path, description),
+  faqLd,
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: title, path },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{title}</h1>
+  <p class="lede">{description}</p>
+
+  <DialInCompass />
+
+  <section class="faq" style="margin-top: 40px;">
+    <h2>Dial-In Troubleshooting Questions</h2>
+    {
+      faqs.map((item) => (
+        <>
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </>
+      ))
+    }
+  </section>
+</BaseLayout>

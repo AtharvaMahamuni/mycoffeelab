@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "../../components/BaseLayout.astro";
-import DrinkFigure from "../../components/DrinkFigure.astro";
+import ComparisonVerdict from "../../components/ComparisonVerdict.astro";
+import ComparisonVitrine from "../../components/ComparisonVitrine.astro";
 import { comparisons, pairDrinks } from "../../lib/comparisons";
 import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
-import { url } from "../../lib/site";
 
 export function getStaticPaths() {
   return comparisons.map((comparison) => ({
@@ -34,14 +34,8 @@ const jsonLd = graph(
 <BaseLayout title={comparison.h1} description={comparison.sentence} path={path} crumbs={crumbs} jsonLd={jsonLd}>
   <h1>{comparison.h1}</h1>
   <p class="lede">{comparison.sentence}</p>
-  <div class="pair">
-    <article>
-      <h2><a href={url(`/drinks/${left.slug}/`)}>{left.h1}</a></h2>
-      <DrinkFigure drink={left} />
-    </article>
-    <article>
-      <h2><a href={url(`/drinks/${right.slug}/`)}>{right.h1}</a></h2>
-      <DrinkFigure drink={right} />
-    </article>
-  </div>
+
+  <ComparisonVerdict pairSlug={comparison.slug} leftName={left.h1} rightName={right.h1} />
+
+  <ComparisonVitrine left={left} right={right} />
 </BaseLayout>

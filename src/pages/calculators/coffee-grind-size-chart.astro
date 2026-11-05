@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../../components/BaseLayout.astro";
+import GrindChart from "../../components/GrindChart.astro";
+import { appNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+
+const path = "/calculators/coffee-grind-size-chart/";
+const title = "Coffee grind size chart";
+const description =
+  "Universal coffee grind size chart translating microns to settings for Baratza Encore, Fellow Ode, and Comandante.";
+
+const crumbs = [
+  { href: "/", label: "Home" },
+  { href: "/calculators/", label: "Calculators" },
+  { label: "Coffee grind size chart" },
+];
+
+const faqs = [
+  {
+    q: "What grind size is best for V60 pour over?",
+    a: "Medium grind, approximately 650 to 750 microns. It should feel like coarse sea salt. On a Fellow Ode Gen 2, this is around 4.0; on a Comandante C40, it is 22 to 24 clicks.",
+  },
+  {
+    q: "Why does grind size matter so much in coffee brewing?",
+    a: "Grind size controls surface area and water flow rate. Finer grounds slow down water and extract rapidly; coarser grounds allow faster flow and extract more slowly. Mismatched grind sizes cause either bitter over-extraction or sour under-extraction.",
+  },
+  {
+    q: "What grind setting is used for French press?",
+    a: "Coarse grind, approximately 1000 to 1200 microns (feels like breadcrumbs). This prevents sediment from slipping through the wire mesh filter and avoids over-extraction during the 4-minute steep.",
+  },
+];
+
+const faqLd = {
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+
+const jsonLd = graph(
+  personNode(),
+  appNode(title, path, description),
+  faqLd,
+  breadcrumbNode([
+    { name: "Home", path: "/" },
+    { name: "Coffee calculators", path: "/calculators/" },
+    { name: title, path },
+  ]),
+);
+---
+
+<BaseLayout title={title} description={description} path={path} crumbs={crumbs} jsonLd={jsonLd}>
+  <h1>{title}</h1>
+  <p class="lede">{description}</p>
+
+  <GrindChart />
+
+  <section class="faq" style="margin-top: 40px;">
+    <h2>Frequently Asked Questions on Grind Size Calibration</h2>
+    {
+      faqs.map((item) => (
+        <>
+          <h3>{item.q}</h3>
+          <p>{item.a}</p>
+        </>
+      ))
+    }
+  </section>
+</BaseLayout>
