@@ -51,6 +51,7 @@ This repository contains the complete 16-part strategic, competitive, and techni
 | **16** | [The Final Strategic Question](./docs/16-FINAL-STRATEGIC-ANSWER.md) | Decisive answer: *Why choose MyCoffeeLab over existing ranking pages?* |
 | **17** | [Build Specification](./docs/17-BUILD-SPECIFICATION.md) | Locked P0 pages, drink record, picture math, calculator tests, page checks, measurement, and corrected tokens. **Wins on conflict.** |
 | **18** | [Implementation Plan](./docs/18-IMPLEMENTATION-PLAN.md) | What the Astro app builds, where the math lives, and which checks must pass. |
+| **19** | [Motion & 3D Specification](./docs/19-MOTION-SCROLL-3D-SPEC.md) | Architectural spec for motion graphics, scroll-driven extraction scrollytelling, Three.js 3D Studio, and fluid pouring mechanics. |
 | **🎨** | [Design System & Palette](./docs/DESIGN-SYSTEM-PALETTE.md) | The "Roaster's Craft" color palette tokens, measured contrast, and layer visualizer hex codes. |
 
 ---
