@@ -3,6 +3,7 @@ import BaseLayout from "../../components/BaseLayout.astro";
 import DrinkFigure from "../../components/DrinkFigure.astro";
 import { drinks } from "../../lib/drinks";
 import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+import { url } from "../../lib/site";
 
 export function getStaticPaths() {
   return drinks.map((drink) => ({ params: { slug: drink.slug }, props: { drink } }));
@@ -28,10 +29,10 @@ const jsonLd = graph(
 
 <BaseLayout title={drink.h1} description={drink.definition} path={path} crumbs={crumbs} jsonLd={jsonLd}>
   <h1>{drink.h1}</h1>
-  <p class="status">{drink.status}. <a href="/corrections/">See the assumption log.</a></p>
+  <p class="status">{drink.status}. <a href={url("/corrections/")}>See the assumption log.</a></p>
   <p class="lede">{drink.definition}</p>
   <DrinkFigure drink={drink} />
-  <p><a href={drink.calculatorHref}>Open this recipe in the calculator</a></p>
+  <p><a href={url(drink.calculatorHref)}>Open this recipe in the calculator</a></p>
   <p>{drink.range}</p>
   <h2>A different version of this name</h2>
   <p>{drink.variant}</p>
@@ -48,7 +49,7 @@ const jsonLd = graph(
       <ul class="card-list">
         {drink.links.map((link) => (
           <li>
-            <a href={link.href}>{link.label}</a>
+            <a href={url(link.href)}>{link.label}</a>
           </li>
         ))}
       </ul>

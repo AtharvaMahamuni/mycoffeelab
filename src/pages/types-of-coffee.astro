@@ -2,6 +2,7 @@
 import BaseLayout from "../components/BaseLayout.astro";
 import { drinks } from "../lib/drinks";
 import { breadcrumbNode, graph, personNode } from "../lib/schema";
+import { url } from "../lib/site";
 
 const description = "Eleven coffee drinks with the house recipe in grams. A directory, not a bid for the head term.";
 const crumbs = [
@@ -24,7 +25,7 @@ const jsonLd = graph(
     {
       drinks.map((drink) => (
         <li>
-          <a href={`/drinks/${drink.slug}/`}>
+          <a href={url(`/drinks/${drink.slug}/`)}>
             {drink.h1}
             <p>{drink.definition}</p>
           </a>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
 import { graph, personNode, websiteNode } from "../lib/schema";
-import { PICTURE_MODEL, SITE_ORIGIN } from "../lib/site";
+import { PICTURE_MODEL, SITE_ORIGIN, url } from "../lib/site";
 
 const description = "Atharva Mahamuni publishes MyCoffeeLab and the house defaults. The recipes are starting points.";
 const jsonLd = graph(websiteNode(), personNode());
@@ -12,7 +12,7 @@ const jsonLd = graph(websiteNode(), personNode());
   <p class="lede">Atharva Mahamuni publishes this site and maintains the house defaults.</p>
   <p>He is the publisher, not a barista coach. A number is either the Specialty Coffee Association golden-cup figure, named on the ratio calculator, or a house starting point.</p>
   <p>The cup drawings use {PICTURE_MODEL}. Whole milk is drawn at 1.03 g/ml. Chocolate sauce is drawn at 1.20 g/ml. Water in the tools is 1 g/ml because the scale is the instrument. Foam centimetres come from that model. They are not a second recipe.</p>
-  <p>The production host is not chosen yet. Canonical links currently use {SITE_ORIGIN}. Change that origin before a public deploy.</p>
+  <p>The production host is {SITE_ORIGIN}.</p>
   <p>There is no account, no analytics pixel, and no affiliate link. Recipe numbers stay in the browser.</p>
-  <p><a href="/corrections/">Read the assumption log</a></p>
+  <p><a href={url("/corrections/")}>Read the assumption log</a></p>
 </BaseLayout>

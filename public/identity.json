@@ -3,14 +3,14 @@
   "@graph": [
     {
       "@type": "WebSite",
-      "@id": "https://mycoffeelab.example/#website",
+      "@id": "https://atharvamahamuni.github.io/mycoffeelab/#website",
       "name": "MyCoffeeLab",
-      "url": "https://mycoffeelab.example/",
-      "publisher": { "@id": "https://mycoffeelab.example/#atharva" }
+      "url": "https://atharvamahamuni.github.io/mycoffeelab/",
+      "publisher": { "@id": "https://atharvamahamuni.github.io/mycoffeelab/#atharva" }
     },
     {
       "@type": "Person",
-      "@id": "https://mycoffeelab.example/#atharva",
+      "@id": "https://atharvamahamuni.github.io/mycoffeelab/#atharva",
       "name": "Atharva Mahamuni",
       "sameAs": [
         "https://x.com/athmatwt",

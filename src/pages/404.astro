@@ -1,8 +1,9 @@
 ---
 import BaseLayout from "../components/BaseLayout.astro";
+import { url } from "../lib/site";
 ---
 
 <BaseLayout title="Page not found" description="That page is not on MyCoffeeLab." path="/404/">
   <h1>Page not found</h1>
-  <p><a href="/">Back to the coffee ratio calculator</a></p>
+  <p><a href={url("/")}>Back to the coffee ratio calculator</a></p>
 </BaseLayout>

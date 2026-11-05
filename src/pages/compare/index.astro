@@ -2,6 +2,7 @@
 import BaseLayout from "../../components/BaseLayout.astro";
 import { comparisons } from "../../lib/comparisons";
 import { breadcrumbNode, graph, personNode } from "../../lib/schema";
+import { url } from "../../lib/site";
 
 const description = "Five coffee drink comparisons, drawn on one scale.";
 const crumbs = [
@@ -23,7 +24,7 @@ const jsonLd = graph(
     {
       comparisons.map((comparison) => (
         <li>
-          <a href={`/compare/${comparison.slug}/`}>
+          <a href={url(`/compare/${comparison.slug}/`)}>
             {comparison.h1}
             <p>{comparison.sentence}</p>
           </a>

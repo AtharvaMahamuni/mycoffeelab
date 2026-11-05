@@ -3,6 +3,7 @@ import BaseLayout from "../../components/BaseLayout.astro";
 import DrinkFigure from "../../components/DrinkFigure.astro";
 import { comparisons, pairDrinks } from "../../lib/comparisons";
 import { articleNode, breadcrumbNode, graph, personNode } from "../../lib/schema";
+import { url } from "../../lib/site";
 
 export function getStaticPaths() {
   return comparisons.map((comparison) => ({
@@ -35,11 +36,11 @@ const jsonLd = graph(
   <p class="lede">{comparison.sentence}</p>
   <div class="pair">
     <article>
-      <h2><a href={`/drinks/${left.slug}/`}>{left.h1}</a></h2>
+      <h2><a href={url(`/drinks/${left.slug}/`)}>{left.h1}</a></h2>
       <DrinkFigure drink={left} />
     </article>
     <article>
-      <h2><a href={`/drinks/${right.slug}/`}>{right.h1}</a></h2>
+      <h2><a href={url(`/drinks/${right.slug}/`)}>{right.h1}</a></h2>
       <DrinkFigure drink={right} />
     </article>
   </div>

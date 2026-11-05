@@ -20,4 +20,4 @@ User-agent: GPTBot
 Disallow: /
 # Content-Signal: search=no, ai-input=no, ai-train=no
 
-Sitemap: https://mycoffeelab.example/sitemap.xml
+Sitemap: https://atharvamahamuni.github.io/mycoffeelab/sitemap.xml
