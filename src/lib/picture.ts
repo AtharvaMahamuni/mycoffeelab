@@ -4,17 +4,23 @@ export const MILK_G_PER_ML = 1.03;
 export const SAUCE_G_PER_ML = 1.2;
 export const PX_PER_ML = 0.72;
 
-export const vessels = {
+export interface Vessel {
+  id: string;
+  label: string;
+  capacityMl: number;
+  rimAreaCm2: number;
+}
+
+export type VesselId = "demitasse" | "lungo-cup" | "gibraltar" | "ceramic-6" | "ceramic-8" | "tumbler";
+
+export const vessels: Record<VesselId, Vessel> = {
   demitasse: { id: "demitasse", label: "demitasse", capacityMl: 60, rimAreaCm2: 18 },
   "lungo-cup": { id: "lungo-cup", label: "lungo cup", capacityMl: 90, rimAreaCm2: 22 },
   gibraltar: { id: "gibraltar", label: "Gibraltar glass", capacityMl: 133, rimAreaCm2: 28 },
   "ceramic-6": { id: "ceramic-6", label: "cup", capacityMl: 180, rimAreaCm2: 32 },
   "ceramic-8": { id: "ceramic-8", label: "cup", capacityMl: 240, rimAreaCm2: 38 },
   tumbler: { id: "tumbler", label: "tumbler", capacityMl: 300, rimAreaCm2: 45 },
-} as const;
-
-export type VesselId = keyof typeof vessels;
-export type Vessel = (typeof vessels)[VesselId];
+};
 
 export interface Recipe {
   doseG: number;

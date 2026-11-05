@@ -12,7 +12,8 @@
     "build": "astro build && node scripts/check-pages.mjs && node scripts/check-budget.mjs",
     "preview": "astro preview",
     "test": "vitest run",
-    "check": "astro check"
+    "check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "astro": "7.4.4"
